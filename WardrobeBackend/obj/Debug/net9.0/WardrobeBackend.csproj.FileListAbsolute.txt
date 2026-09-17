@@ -31,3 +31,37 @@ C:\Users\bro45\source\repos\WardrobeBackend\obj\Debug\net9.0\refint\WardrobeBack
 C:\Users\bro45\source\repos\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.pdb
 C:\Users\bro45\source\repos\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.genruntimeconfig.cache
 C:\Users\bro45\source\repos\WardrobeBackend\obj\Debug\net9.0\ref\WardrobeBackend.dll
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\appsettings.Development.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\appsettings.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\WardrobeBackend.staticwebassets.endpoints.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\WardrobeBackend.exe
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\WardrobeBackend.deps.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\WardrobeBackend.runtimeconfig.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\WardrobeBackend.dll
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\WardrobeBackend.pdb
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.csproj.AssemblyReference.cache
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.AssemblyInfoInputs.cache
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.AssemblyInfo.cs
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.csproj.CoreCompileInputs.cache
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.sourcelink.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\rjimswa.dswa.cache.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\scopedcss\bundle\WardrobeBackend.styles.css
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\staticwebassets.build.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\staticwebassets.build.json.cache
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\staticwebassets.development.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\swae.build.ex.cache
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\Wardrobe.D527941C.Up2Date
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.dll
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\refint\WardrobeBackend.dll
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.pdb
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\WardrobeBackend.genruntimeconfig.cache
+C:\Users\miles\OneDrive\Desktop\482 project\wardrobe-management-website\WardrobeBackend\obj\Debug\net9.0\ref\WardrobeBackend.dll

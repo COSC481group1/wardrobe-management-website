@@ -1,35 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\WardrobeBackend.csproj": {}
+    "C:\\Users\\miles\\OneDrive\\Desktop\\482 project\\wardrobe-management-website\\WardrobeBackend\\WardrobeBackend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\WardrobeBackend.csproj": {
+    "C:\\Users\\miles\\OneDrive\\Desktop\\482 project\\wardrobe-management-website\\WardrobeBackend\\WardrobeBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\WardrobeBackend.csproj",
+        "projectUniqueName": "C:\\Users\\miles\\OneDrive\\Desktop\\482 project\\wardrobe-management-website\\WardrobeBackend\\WardrobeBackend.csproj",
         "projectName": "WardrobeBackend",
-        "projectPath": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\WardrobeBackend.csproj",
-        "packagesPath": "C:\\Users\\bro45\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\obj\\",
+        "projectPath": "C:\\Users\\miles\\OneDrive\\Desktop\\482 project\\wardrobe-management-website\\WardrobeBackend\\WardrobeBackend.csproj",
+        "packagesPath": "C:\\Users\\miles\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\miles\\OneDrive\\Desktop\\482 project\\wardrobe-management-website\\WardrobeBackend\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\bro45\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\miles\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
+            "framework": "net9.0",
             "targetAlias": "net9.0",
             "projectReferences": {}
           }
@@ -44,10 +39,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net9.0": {
+          "framework": "net9.0",
           "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
@@ -74,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
