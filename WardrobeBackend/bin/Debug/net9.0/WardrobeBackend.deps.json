@@ -1,0 +1,59 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "WardrobeBackend/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.OpenApi": "9.0.20"
+        },
+        "runtime": {
+          "WardrobeBackend.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.OpenApi/9.0.20": {
+        "dependencies": {
+          "Microsoft.OpenApi": "1.6.30"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "assemblyVersion": "9.0.20.0",
+            "fileVersion": "9.0.2026.41407"
+          }
+        }
+      },
+      "Microsoft.OpenApi/1.6.30": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "assemblyVersion": "1.6.30.0",
+            "fileVersion": "1.6.30.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "WardrobeBackend/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.AspNetCore.OpenApi/9.0.20": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dJ+PafHe6aOIk+2qfi1w9w1GIYT1aDJIb8FKAtX6oEibQaPw+ASPHjBgiLH0rHEy5wYzrul6TW1qm2d8uuunMw==",
+      "path": "microsoft.aspnetcore.openapi/9.0.20",
+      "hashPath": "microsoft.aspnetcore.openapi.9.0.20.nupkg.sha512"
+    },
+    "Microsoft.OpenApi/1.6.30": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GIxOTS4vUCdIRDt+BcnJQKdaKb9b+L14IJnzkbHOXlm7JTbIyp37DpA2SdpxjdTB1RPQ1jhPwbdoNcUWznHsrg==",
+      "path": "microsoft.openapi/1.6.30",
+      "hashPath": "microsoft.openapi.1.6.30.nupkg.sha512"
+    }
+  }
+}

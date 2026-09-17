@@ -1,0 +1,22 @@
+[
+  {
+    "ContainingType": "WardrobeBackend.Controllers.WardrobeController",
+    "Method": "Fake",
+    "RelativePath": "Wardrobe",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WardrobeBackend.Controllers.WardrobeController",
+    "Method": "Get",
+    "RelativePath": "Wardrobe/test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
