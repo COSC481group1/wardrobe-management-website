@@ -1,4 +1,8 @@
 
+using Microsoft.AspNetCore.Builder;
+using NSwag.AspNetCore;
+using YamlDotNet.Serialization;
+
 namespace WardrobeBackend
 {
     public class Program
@@ -13,6 +17,8 @@ namespace WardrobeBackend
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
+            builder.Services.AddSwaggerDocument();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -21,10 +27,14 @@ namespace WardrobeBackend
                 app.MapOpenApi();
             }
 
+            app.UseSwaggerUi(settings =>
+            {
+                settings.SwaggerRoutes.Add(new SwaggerUiRoute("v1", "/openapi/v1.json"));
+            });
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

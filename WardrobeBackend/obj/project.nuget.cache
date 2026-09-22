@@ -1,11 +1,24 @@
 {
   "version": 2,
-  "dgSpecHash": "xAcQROJn92g=",
+  "dgSpecHash": "x8GBlNyIUdE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\miles\\OneDrive\\Desktop\\482 project\\wardrobe-management-website\\WardrobeBackend\\WardrobeBackend.csproj",
+  "projectFilePath": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\WardrobeBackend.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\miles\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.20\\microsoft.aspnetcore.openapi.9.0.20.nupkg.sha512",
-    "C:\\Users\\miles\\.nuget\\packages\\microsoft.openapi\\1.6.30\\microsoft.openapi.1.6.30.nupkg.sha512"
+    "C:\\Users\\bro45\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.20\\microsoft.aspnetcore.openapi.9.0.20.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\microsoft.openapi\\1.6.30\\microsoft.openapi.1.6.30.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\namotion.reflection\\3.5.0\\namotion.reflection.3.5.0.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\njsonschema\\11.6.1\\njsonschema.11.6.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\njsonschema.annotations\\11.6.1\\njsonschema.annotations.11.6.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\njsonschema.newtonsoftjson\\11.6.1\\njsonschema.newtonsoftjson.11.6.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\njsonschema.yaml\\11.6.1\\njsonschema.yaml.11.6.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\nswag.annotations\\14.7.1\\nswag.annotations.14.7.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\nswag.aspnetcore\\14.7.1\\nswag.aspnetcore.14.7.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\nswag.core\\14.7.1\\nswag.core.14.7.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\nswag.core.yaml\\14.7.1\\nswag.core.yaml.14.7.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\nswag.generation\\14.7.1\\nswag.generation.14.7.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\nswag.generation.aspnetcore\\14.7.1\\nswag.generation.aspnetcore.14.7.1.nupkg.sha512",
+    "C:\\Users\\bro45\\.nuget\\packages\\yamldotnet\\16.3.0\\yamldotnet.16.3.0.nupkg.sha512"
   ],
   "logs": []
 }

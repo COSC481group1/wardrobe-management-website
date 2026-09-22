@@ -1,18 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\",
+  "WorkspaceRootPath": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|c:\\users\\bro45\\source\\repos\\wardrobebackend\\controllers\\wardrobecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|solutionrelative:controllers\\wardrobecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|c:\\users\\bro45\\documents\\github\\wardrobe-management-website\\wardrobebackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|c:\\users\\bro45\\source\\repos\\wardrobebackend\\wardrobebackend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "AbsoluteMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|c:\\users\\bro45\\documents\\github\\wardrobe-management-website\\wardrobebackend\\wardrobebackend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
       "RelativeMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|solutionrelative:wardrobebackend.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|c:\\users\\bro45\\source\\repos\\wardrobebackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|c:\\users\\bro45\\documents\\github\\wardrobe-management-website\\wardrobebackend\\controllers\\wardrobecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|solutionrelative:controllers\\wardrobecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|c:\\users\\bro45\\documents\\github\\wardrobe-management-website\\wardrobebackend\\objects\\article.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|solutionrelative:objects\\article.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|c:\\users\\bro45\\documents\\github\\wardrobe-management-website\\wardrobebackend\\models\\articledto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EB013C41-F12C-46E6-A69D-542F0DDEF212}|WardrobeBackend.csproj|solutionrelative:models\\articledto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,13 +54,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
+              "Title": "ArticleDto.cs",
+              "DocumentMoniker": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\Models\\ArticleDto.cs",
+              "RelativeDocumentMoniker": "Models\\ArticleDto.cs",
+              "ToolTip": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\Models\\ArticleDto.cs",
+              "RelativeToolTip": "Models\\ArticleDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T02:26:25.055Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Article.cs",
+              "DocumentMoniker": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\Objects\\Article.cs",
+              "RelativeDocumentMoniker": "Objects\\Article.cs",
+              "ToolTip": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\Objects\\Article.cs",
+              "RelativeToolTip": "Objects\\Article.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T01:59:19.127Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "WardrobeController.cs",
-              "DocumentMoniker": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\Controllers\\WardrobeController.cs",
+              "DocumentMoniker": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\Controllers\\WardrobeController.cs",
               "RelativeDocumentMoniker": "Controllers\\WardrobeController.cs",
-              "ToolTip": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\Controllers\\WardrobeController.cs",
+              "ToolTip": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\Controllers\\WardrobeController.cs",
               "RelativeToolTip": "Controllers\\WardrobeController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAA9AAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwAEAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-16T01:29:05.305Z",
               "EditorCaption": ""
@@ -61,24 +95,24 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "WardrobeBackend.http",
-              "DocumentMoniker": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\WardrobeBackend.http",
+              "DocumentMoniker": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\WardrobeBackend.http",
               "RelativeDocumentMoniker": "WardrobeBackend.http",
-              "ToolTip": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\WardrobeBackend.http",
+              "ToolTip": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\WardrobeBackend.http",
               "RelativeToolTip": "WardrobeBackend.http",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
               "WhenOpened": "2026-09-16T01:26:08.873Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\bro45\\source\\repos\\WardrobeBackend\\Program.cs",
+              "ToolTip": "C:\\Users\\bro45\\Documents\\GitHub\\wardrobe-management-website\\WardrobeBackend\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAmwBYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAACUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-16T01:26:06.295Z",
               "EditorCaption": ""

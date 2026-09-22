@@ -1,37 +1,48 @@
+namespace WardrobeBackend.Controllers;
+using Microsoft.OpenApi;
 using Microsoft.AspNetCore.Mvc;
+using WardrobeBackend.Objects;
 
-namespace WardrobeBackend.Controllers
+
+[ApiController]
+[Route("[controller]")]
+public class WardrobeController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WardrobeController : ControllerBase
+    private readonly ILogger<WardrobeController> _logger;
+
+    public WardrobeController(ILogger<WardrobeController> logger)
     {
-        private readonly ILogger<WardrobeController> _logger;
+        _logger = logger;
+    }
 
-        public WardrobeController(ILogger<WardrobeController> logger)
+    [HttpPost]
+    [Route("{user}/article")]
+    public void AddArticle(string user, ArticleDto article)
+    {
+        if(!Article.dummyCache.TryGetValue(user, out List<Article>? articles))
         {
-            _logger = logger;
+            articles = new List<Article>();
+            Article.dummyCache.Add(user, articles);
         }
+        articles.Add(Article.FromDto(article));
+    }
 
-        [HttpGet]
-        [Route("test")]
-        public object Get()
+    [HttpGet]
+    [Route("{user}/articles")]
+    public ArticleDto[] GetArticels(string user)
+    {
+        if(Article.dummyCache.TryGetValue(user, out List<Article>? articles))
         {
-            return new
-            {
-                Name = "Wardrobe Application",
-                Description = "A really cool program for managing your clothes"
-            };
+            return articles.Select(a => a.ToDto()).ToArray();
         }
+        return [];
+    }
 
-        [HttpGet]
-        [Route("clothes")]
-        public object Fake()
-        {
-            return new
-            {
-                String = "Fake Object"
-            };
-        }
+    [HttpGet]
+    [Route("test")]
+    public object Test()
+    {
+        return new { Test = "Worked" };
     }
 }
+
