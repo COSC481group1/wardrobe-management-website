@@ -2,11 +2,17 @@
 using Microsoft.AspNetCore.Builder;
 using NSwag.AspNetCore;
 using YamlDotNet.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using WardrobeBackend.Controllers;
 
 namespace WardrobeBackend
 {
     public class Program
     {
+        public const string Me = @"https://localhost:7163/";
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +24,22 @@ namespace WardrobeBackend
             builder.Services.AddOpenApi();
 
             builder.Services.AddSwaggerDocument();
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
+                AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = Me,
+                        ValidAudience = Me,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenProvider.SecureKey)),
+                    };
+                });
+
+            builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
 
             var app = builder.Build();
 

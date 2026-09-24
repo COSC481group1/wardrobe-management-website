@@ -112,3 +112,11 @@ C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\
 C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\NSwag.Generation.dll
 C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\NSwag.Generation.AspNetCore.dll
 C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\YamlDotNet.dll
+C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\bro45\Documents\GitHub\wardrobe-management-website\WardrobeBackend\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll

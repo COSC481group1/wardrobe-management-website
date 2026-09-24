@@ -2,9 +2,10 @@ namespace WardrobeBackend.Controllers;
 using Microsoft.OpenApi;
 using Microsoft.AspNetCore.Mvc;
 using WardrobeBackend.Objects;
-
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class WardrobeController : ControllerBase
 {
@@ -15,10 +16,10 @@ public class WardrobeController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost]
-    [Route("{user}/article")]
-    public void AddArticle(string user, ArticleDto article)
+    [HttpPost("article")]
+    public void AddArticle(ArticleDto article)
     {
+        string user = User.Claims.First(c => c.ValueType == "user").Value;
         if(!Article.dummyCache.TryGetValue(user, out List<Article>? articles))
         {
             articles = new List<Article>();
@@ -27,8 +28,7 @@ public class WardrobeController : ControllerBase
         articles.Add(Article.FromDto(article));
     }
 
-    [HttpGet]
-    [Route("{user}/articles")]
+    [HttpGet("{user}/articles")]
     public ArticleDto[] GetArticels(string user)
     {
         if(Article.dummyCache.TryGetValue(user, out List<Article>? articles))
@@ -38,8 +38,7 @@ public class WardrobeController : ControllerBase
         return [];
     }
 
-    [HttpGet]
-    [Route("test")]
+    [HttpGet("test")]
     public object Test()
     {
         return new { Test = "Worked" };
