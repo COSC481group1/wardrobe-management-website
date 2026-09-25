@@ -1,7 +1,8 @@
-
 using Microsoft.AspNetCore.Builder;
 using NSwag.AspNetCore;
 using YamlDotNet.Serialization;
+using WardrobeBackend.Config;
+using WardrobeBackend.Services;
 
 namespace WardrobeBackend
 {
@@ -11,17 +12,20 @@ namespace WardrobeBackend
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Bind Database section from appsettings.json into DatabaseOptions
+            builder.Services.Configure<DatabaseOptions>(
+                builder.Configuration.GetSection("Database"));
+
+            // Register the connection factory
+            builder.Services.AddScoped<IDbConnectionFactory, RdsIamConnectionFactory>();
+
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
-
             builder.Services.AddSwaggerDocument();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
@@ -33,9 +37,7 @@ namespace WardrobeBackend
             });
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
             app.MapControllers();
 
             app.Run();
