@@ -3,23 +3,21 @@ using NSwag.AspNetCore;
 using YamlDotNet.Serialization;
 using WardrobeBackend.Config;
 using WardrobeBackend.Services;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Cryptography;
+using Npgsql;
 
 namespace WardrobeBackend
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
+        public static async Task Main(string[] args)
+{
             var builder = WebApplication.CreateBuilder(args);
 
-            // Bind Database section from appsettings.json into DatabaseOptions
-            builder.Services.Configure<DatabaseOptions>(
-                builder.Configuration.GetSection("Database"));
-
-            // Register the connection factory
+            builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("Database"));
             builder.Services.AddScoped<IDbConnectionFactory, RdsIamConnectionFactory>();
 
-            // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerDocument();
@@ -42,5 +40,39 @@ namespace WardrobeBackend
 
             app.Run();
         }
-    }
+
+        public static async Task Password(IDbConnectionFactory dbFactory) {
+            Console.Write("Enter a password: ");
+            string? password = Console.ReadLine();
+
+            byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
+            string saltString = Convert.ToBase64String(salt);
+            Console.WriteLine($"Salt: {saltString}");
+
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password!,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 600000,
+                numBytesRequested: 256 / 8));
+
+            Console.WriteLine($"Hashed: {hashed}");
+            await SaveUserAsync("jmiles11", hashed, saltString, dbFactory);
+        }
+
+        public static async Task SaveUserAsync(string username, string hash, string salt, IDbConnectionFactory dbFactory) {
+            const string sql = @"
+                INSERT INTO users (username, password_hash, password_salt)
+                VALUES (@username, @password_hash, @password_salt);";
+
+            await using var connection = await dbFactory.CreateConnectionAsync();
+
+            await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("username", username);
+            command.Parameters.AddWithValue("password_hash", hash);
+            command.Parameters.AddWithValue("password_salt", salt);
+
+            await command.ExecuteNonQueryAsync();
+        }
+    } 
 }
