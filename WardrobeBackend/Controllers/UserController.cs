@@ -22,9 +22,9 @@ public class UserController : ControllerBase
         _tokenProvider = tokenProvider;
     }
 
-    [HttpGet("token")]
-    public object Get() =>
-        _tokenProvider.CreateToken("LPRAW");
+    [HttpGet("SignIn")]
+    public object Get(string username) =>
+        _tokenProvider.CreateToken(username);
 }
 
 public interface ITokenProvider

@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authorization;
 [Route("[controller]")]
 public class WardrobeController : ControllerBase
 {
+    private string CurrentUserEmail =>
+        User.Claims.First(c => c.Type == "Email").Value;
+
     private readonly ILogger<WardrobeController> _logger;
 
     public WardrobeController(ILogger<WardrobeController> logger)
@@ -19,7 +22,7 @@ public class WardrobeController : ControllerBase
     [HttpPost("article")]
     public void AddArticle(ArticleDto article)
     {
-        string user = User.Claims.First(c => c.ValueType == "user").Value;
+        string user = CurrentUserEmail;
         if(!Article.dummyCache.TryGetValue(user, out List<Article>? articles))
         {
             articles = new List<Article>();
@@ -28,10 +31,11 @@ public class WardrobeController : ControllerBase
         articles.Add(Article.FromDto(article));
     }
 
-    [HttpGet("{user}/articles")]
-    public ArticleDto[] GetArticels(string user)
+    [HttpGet("articles")]
+    public ArticleDto[] GetArticels()
     {
-        if(Article.dummyCache.TryGetValue(user, out List<Article>? articles))
+        string user = CurrentUserEmail;
+        if (Article.dummyCache.TryGetValue(user, out List<Article>? articles))
         {
             return articles.Select(a => a.ToDto()).ToArray();
         }
@@ -41,7 +45,7 @@ public class WardrobeController : ControllerBase
     [HttpGet("test")]
     public object Test()
     {
-        return new { Test = "Worked" };
+        return new { Test = "You claim to be " + CurrentUserEmail };
     }
 }
 

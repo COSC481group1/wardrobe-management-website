@@ -2,38 +2,18 @@
   {
     "ContainingType": "WardrobeBackend.Controllers.UserController",
     "Method": "Get",
-    "RelativePath": "User/token",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WardrobeBackend.Controllers.WardrobeController",
-    "Method": "GetArticels",
-    "RelativePath": "Wardrobe/{user}/articles",
+    "RelativePath": "User/SignIn",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "user",
+        "Name": "username",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "ArticleDto[]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "WardrobeBackend.Controllers.WardrobeController",
@@ -53,6 +33,26 @@
       {
         "Type": "System.Void",
         "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WardrobeBackend.Controllers.WardrobeController",
+    "Method": "GetArticels",
+    "RelativePath": "Wardrobe/articles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "ArticleDto[]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 200
       }
     ]
