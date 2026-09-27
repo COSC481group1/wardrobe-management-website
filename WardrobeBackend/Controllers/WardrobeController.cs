@@ -2,12 +2,16 @@ namespace WardrobeBackend.Controllers;
 using Microsoft.OpenApi;
 using Microsoft.AspNetCore.Mvc;
 using WardrobeBackend.Objects;
-
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class WardrobeController : ControllerBase
 {
+    private string CurrentUserEmail =>
+        User.Claims.First(c => c.Type == "Email").Value;
+
     private readonly ILogger<WardrobeController> _logger;
 
     public WardrobeController(ILogger<WardrobeController> logger)
@@ -15,10 +19,10 @@ public class WardrobeController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost]
-    [Route("{user}/article")]
-    public void AddArticle(string user, ArticleDto article)
+    [HttpPost("article")]
+    public void AddArticle(ArticleDto article)
     {
+        string user = CurrentUserEmail;
         if(!Article.dummyCache.TryGetValue(user, out List<Article>? articles))
         {
             articles = new List<Article>();
@@ -27,22 +31,21 @@ public class WardrobeController : ControllerBase
         articles.Add(Article.FromDto(article));
     }
 
-    [HttpGet]
-    [Route("{user}/articles")]
-    public ArticleDto[] GetArticels(string user)
+    [HttpGet("articles")]
+    public ArticleDto[] GetArticels()
     {
-        if(Article.dummyCache.TryGetValue(user, out List<Article>? articles))
+        string user = CurrentUserEmail;
+        if (Article.dummyCache.TryGetValue(user, out List<Article>? articles))
         {
             return articles.Select(a => a.ToDto()).ToArray();
         }
         return [];
     }
 
-    [HttpGet]
-    [Route("test")]
+    [HttpGet("test")]
     public object Test()
     {
-        return new { Test = "Worked" };
+        return new { Test = "You claim to be " + CurrentUserEmail };
     }
 }
 
