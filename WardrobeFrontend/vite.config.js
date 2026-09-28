@@ -8,4 +8,8 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  build: {
+    outDir: '../WardrobeBackend/wwwroot',
+    emptyOutDir: true
+  }
 })

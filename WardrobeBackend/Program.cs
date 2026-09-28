@@ -61,10 +61,13 @@ namespace WardrobeBackend
 
             var app = builder.Build();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseOpenApi();
-
+            
             app.UseSwaggerUi(settings =>
             {
                 settings.SwaggerRoutes.Add(new SwaggerUiRoute("v1", "/swagger/v1/swagger.json"));
