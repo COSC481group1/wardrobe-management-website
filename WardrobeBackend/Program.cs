@@ -70,6 +70,15 @@ namespace WardrobeBackend
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseOpenApi();
+            
+            // One-off: run only when launched with a "create-user" argument
+            if (args.Contains("create-user")) {
+                using var scope = app.Services.CreateScope();
+                var dbFactory = scope.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
+
+                await Password(dbFactory);
+                return; // exit instead of starting the web server
+            }
 
             app.UseSwaggerUi(settings =>
             {
@@ -83,6 +92,9 @@ namespace WardrobeBackend
         }
 
         public static async Task Password(IDbConnectionFactory dbFactory) {
+            Console.Write("Enter a email: ");
+            string? email = Console.ReadLine();
+
             Console.Write("Enter a password: ");
             string? password = Console.ReadLine();
 
@@ -98,18 +110,18 @@ namespace WardrobeBackend
                 numBytesRequested: 256 / 8));
 
             Console.WriteLine($"Hashed: {hashed}");
-            await SaveUserAsync("jmiles11", hashed, saltString, dbFactory);
+            await SaveUserAsync(email!, hashed, saltString, dbFactory);
         }
 
-        public static async Task SaveUserAsync(string username, string hash, string salt, IDbConnectionFactory dbFactory) {
+        public static async Task SaveUserAsync(string email, string hash, string salt, IDbConnectionFactory dbFactory) {
             const string sql = @"
-                INSERT INTO users (username, password_hash, password_salt)
-                VALUES (@username, @password_hash, @password_salt);";
+                INSERT INTO users (email, password_hash, password_salt)
+                VALUES (@email, @password_hash, @password_salt);";
 
             await using var connection = await dbFactory.CreateConnectionAsync();
 
             await using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddWithValue("username", username);
+            command.Parameters.AddWithValue("email", email);
             command.Parameters.AddWithValue("password_hash", hash);
             command.Parameters.AddWithValue("password_salt", salt);
 
