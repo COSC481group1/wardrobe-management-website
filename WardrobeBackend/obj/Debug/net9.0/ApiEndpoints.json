@@ -1,5 +1,15 @@
 [
   {
+    "ContainingType": "WardrobeBackend.Controllers.TestDbController",
+    "Method": "Get",
+    "RelativePath": "api/TestDb",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WardrobeBackend.Controllers.UserController",
     "Method": "Get",
     "RelativePath": "User/SignIn",

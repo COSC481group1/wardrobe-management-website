@@ -8,12 +8,34 @@
     ".NETCoreApp,Version=v9.0": {
       "WardrobeBackend/1.0.0": {
         "dependencies": {
+          "AWSSDK.RDS": "4.0.105.3",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.0",
           "Microsoft.AspNetCore.OpenApi": "9.0.20",
-          "NSwag.AspNetCore": "14.7.1"
+          "NSwag.AspNetCore": "14.7.1",
+          "Npgsql": "10.0.3",
+          "Npgsql.DependencyInjection": "10.0.3"
         },
         "runtime": {
           "WardrobeBackend.dll": {}
+        }
+      },
+      "AWSSDK.Core/4.0.102.6": {
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.102.6"
+          }
+        }
+      },
+      "AWSSDK.RDS/4.0.105.3": {
+        "dependencies": {
+          "AWSSDK.Core": "4.0.102.6"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.RDS.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.105.3"
+          }
         }
       },
       "Microsoft.AspNetCore.Authentication.JwtBearer/9.0.0": {
@@ -36,6 +58,12 @@
             "assemblyVersion": "9.0.20.0",
             "fileVersion": "9.0.2026.41407"
           }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0": {},
+      "Microsoft.Extensions.Logging.Abstractions/9.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0"
         }
       },
       "Microsoft.IdentityModel.Abstractions/8.0.1": {
@@ -171,6 +199,29 @@
           }
         }
       },
+      "Npgsql/10.0.3": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0"
+        },
+        "runtime": {
+          "lib/net9.0/Npgsql.dll": {
+            "assemblyVersion": "10.0.3.0",
+            "fileVersion": "10.0.3.0"
+          }
+        }
+      },
+      "Npgsql.DependencyInjection/10.0.3": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0",
+          "Npgsql": "10.0.3"
+        },
+        "runtime": {
+          "lib/net8.0/Npgsql.DependencyInjection.dll": {
+            "assemblyVersion": "10.0.3.0",
+            "fileVersion": "10.0.3.0"
+          }
+        }
+      },
       "NSwag.Annotations/14.7.1": {
         "runtime": {
           "lib/netstandard2.0/NSwag.Annotations.dll": {
@@ -283,6 +334,20 @@
       "serviceable": false,
       "sha512": ""
     },
+    "AWSSDK.Core/4.0.102.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YwUi9qpz/OHqwEgsf8I5jj1aC/xkkjmF91R8Yx6yD66dhOiORgQJynYQk0fzI4xdhBgUaw8SRGbMkLRrvL+CNA==",
+      "path": "awssdk.core/4.0.102.6",
+      "hashPath": "awssdk.core.4.0.102.6.nupkg.sha512"
+    },
+    "AWSSDK.RDS/4.0.105.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LF3fUze3mbiOj+EGEPK5mTgd+VYA5X7Xk5wU6ITMFjo11oce0tMfPifdOAGlnWIgad1jV2s1bDaLRiwkE7aHpg==",
+      "path": "awssdk.rds/4.0.105.3",
+      "hashPath": "awssdk.rds.4.0.105.3.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.Authentication.JwtBearer/9.0.0": {
       "type": "package",
       "serviceable": true,
@@ -296,6 +361,20 @@
       "sha512": "sha512-dJ+PafHe6aOIk+2qfi1w9w1GIYT1aDJIb8FKAtX6oEibQaPw+ASPHjBgiLH0rHEy5wYzrul6TW1qm2d8uuunMw==",
       "path": "microsoft.aspnetcore.openapi/9.0.20",
       "hashPath": "microsoft.aspnetcore.openapi.9.0.20.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+6f2qv2a3dLwd5w6JanPIPs47CxRbnk+ZocMJUhv9NxP88VlOcJYZs9jY+MYSjxvady08bUZn6qgiNh7DadGgg==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/9.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.9.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/9.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-g0UfujELzlLbHoVG8kPKVBaW470Ewi+jnptGS9KUi6jcb+k2StujtK3m26DFSGGwQ/+bVgZfsWqNzlP6YOejvw==",
+      "path": "microsoft.extensions.logging.abstractions/9.0.0",
+      "hashPath": "microsoft.extensions.logging.abstractions.9.0.0.nupkg.sha512"
     },
     "Microsoft.IdentityModel.Abstractions/8.0.1": {
       "type": "package",
@@ -387,6 +466,20 @@
       "sha512": "sha512-3jH3tupVurenoO+bnp9BWR5G46caNqXSWSMGuwb403F7a9vkO13LycuyjD9ohpZHI9crFY8EUWco+pL7eTUxdg==",
       "path": "njsonschema.yaml/11.6.1",
       "hashPath": "njsonschema.yaml.11.6.1.nupkg.sha512"
+    },
+    "Npgsql/10.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7nb5YzXuvWWJxB0J8DiyL3we+X4FOctZrt0fIBnucOIaIevFEEwGQVZKtiu9olXdlNAK1eNgqSral6r/jlhI4w==",
+      "path": "npgsql/10.0.3",
+      "hashPath": "npgsql.10.0.3.nupkg.sha512"
+    },
+    "Npgsql.DependencyInjection/10.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-L0595kRX2NS5QWu/XGhQPmdhRLv3KhFGhnwpy8pEKZh4qlkom6wek1GW+eMBiPzoqFWlxHp3nc5myIKlX8VvYA==",
+      "path": "npgsql.dependencyinjection/10.0.3",
+      "hashPath": "npgsql.dependencyinjection.10.0.3.nupkg.sha512"
     },
     "NSwag.Annotations/14.7.1": {
       "type": "package",
