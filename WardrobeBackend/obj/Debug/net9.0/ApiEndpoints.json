@@ -11,7 +11,34 @@
   },
   {
     "ContainingType": "WardrobeBackend.Controllers.UserController",
-    "Method": "Get",
+    "Method": "CreateUser",
+    "RelativePath": "User/CreateAccount",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "password",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WardrobeBackend.Controllers.UserController",
+    "Method": "SignIn",
     "RelativePath": "User/SignIn",
     "HttpMethod": "GET",
     "IsController": true,
@@ -19,6 +46,11 @@
     "Parameters": [
       {
         "Name": "username",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "password",
         "Type": "System.String",
         "IsRequired": false
       }

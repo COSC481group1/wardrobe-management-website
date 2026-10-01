@@ -5,9 +5,11 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using WardrobeBackend.Objects;
+using WardrobeBackend.Services;
 
 [ApiController]
 [Route("[controller]")]
@@ -22,37 +24,19 @@ public class UserController : ControllerBase
         _tokenProvider = tokenProvider;
     }
 
+    [HttpGet("CreateAccount")]
+    public async Task CreateUser(string username, string password) =>
+        await Database.User.SaveUserAsync(username, password);
+
     [HttpGet("SignIn")]
-    public object Get(string username) =>
-        _tokenProvider.CreateToken(username);
-}
-
-public interface ITokenProvider
-{
-    string CreateToken(string email);
-}
-
-public class TokenProvider : ITokenProvider
-{
-    public const string SecureKey = @"SecureKey:)!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!
-!!! key !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-
-    public string CreateToken(string email) =>
-        new JsonWebTokenHandler().CreateToken(new SecurityTokenDescriptor()
+    public object SignIn(string username, string password)
+    {
+        Database.User user = new();
+        if (user.GetUser(username) && user.CheckPassword(password))
         {
-            Subject = new ClaimsIdentity(new List<Claim>
-            {
-                new("Email", email),
-            }),
-            Expires = DateTime.UtcNow.AddMinutes(60),
-            Issuer = Program.Me,
-            Audience = Program.Me,
-            SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecureKey)), SecurityAlgorithms.HmacSha256)
-        });
+            return _tokenProvider.CreateToken(username);
+        }
+        return BadRequest();
+    }
 }
 

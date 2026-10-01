@@ -71,14 +71,8 @@ namespace WardrobeBackend
             app.UseAuthorization();
             app.UseOpenApi();
             
-            // One-off: run only when launched with a "create-user" argument
-            if (args.Contains("create-user")) {
-                using var scope = app.Services.CreateScope();
-                var dbFactory = scope.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
-
-                await Password(dbFactory);
-                return; // exit instead of starting the web server
-            }
+            using var scope = app.Services.CreateScope();
+            Database.Database.ConnectionFactory = scope.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
 
             app.UseSwaggerUi(settings =>
             {
@@ -89,43 +83,6 @@ namespace WardrobeBackend
             app.MapControllers();
 
             app.Run();
-        }
-
-        public static async Task Password(IDbConnectionFactory dbFactory) {
-            Console.Write("Enter a email: ");
-            string? email = Console.ReadLine();
-
-            Console.Write("Enter a password: ");
-            string? password = Console.ReadLine();
-
-            byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
-            string saltString = Convert.ToBase64String(salt);
-            Console.WriteLine($"Salt: {saltString}");
-
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password!,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 600000,
-                numBytesRequested: 256 / 8));
-
-            Console.WriteLine($"Hashed: {hashed}");
-            await SaveUserAsync(email!, hashed, saltString, dbFactory);
-        }
-
-        public static async Task SaveUserAsync(string email, string hash, string salt, IDbConnectionFactory dbFactory) {
-            const string sql = @"
-                INSERT INTO users (email, password_hash, password_salt)
-                VALUES (@email, @password_hash, @password_salt);";
-
-            await using var connection = await dbFactory.CreateConnectionAsync();
-
-            await using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddWithValue("email", email);
-            command.Parameters.AddWithValue("password_hash", hash);
-            command.Parameters.AddWithValue("password_salt", salt);
-
-            await command.ExecuteNonQueryAsync();
         }
     } 
 }
