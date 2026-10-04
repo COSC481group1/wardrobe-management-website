@@ -1,8 +1,12 @@
 import './App.css'
 import { useState, useRef, useEffect } from 'react'
+import SignUp from './pages/SignUp'
+import Login from './pages/Login'
+import About from './pages/About'
 
 function App() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [justRegistered, setJustRegistered] = useState(false)
   const [favorites, setFavorites] = useState([
     { id: 1, name: 'Item 1' },
     { id: 2, name: 'Item 2' },
@@ -20,8 +24,17 @@ function App() {
     { name: 'Closet', href: '#closet' },
     { name: 'Outfits', href: '#outfits' },
     { name: 'Favourite', href: '#favourite' },
-    { name: 'Settings', href: '#settings' }
+    { name: 'Settings', href: '#settings' },
+    { name: 'Sign Up', href: '#signup' },
+    { name: 'Log In', href: '#login' },
+    { name: 'About', href: '#about' }
   ]
+
+  // Looked up by href instead of hardcoded numbers so this keeps working
+  // if menuItems ever gets reordered.
+  const signupIndex = menuItems.findIndex((item) => item.href === '#signup')
+  const loginIndex = menuItems.findIndex((item) => item.href === '#login')
+  const aboutIndex = menuItems.findIndex((item) => item.href === '#about')
 
   const contentMap = {
     0: {
@@ -105,8 +118,8 @@ function App() {
   const currentContent = contentMap[activeIndex]
   return (
     <div className="App">
-        <div 
-          className="sidebar" 
+        <div
+          className="sidebar"
           ref={sidebarRef}
           onClick={handleSidebarClick}
           tabIndex={0}
@@ -115,7 +128,7 @@ function App() {
             <ul>
               {menuItems.map((item, index) => (
                 <li key={index}>
-                  <a 
+                  <a
                     href={item.href}
                     onClick={(e) => handleLinkClick(index, e)}
                     className={activeIndex === index ? 'active' : ''}
@@ -128,59 +141,87 @@ function App() {
           </nav>
         </div>
         <div className="main-content">
-          <h1>{currentContent.title}</h1>
-          {activeIndex === 2 ? (
-            <div className="outfits-page">
-              <div className="weather-panel">
-                <div className="weather-icon">☀️</div>
-                <div className="weather-info">
-                  <p className="weather-temp">72°F</p>
-                  <p className="weather-condition">Sunny</p>
-                </div>
-              </div>
-              <div className="outfits-content">
-                {/* Outfits content will go here */}
-              </div>
-            </div>
-          ) : activeIndex === 3 ? (
-            <div className="favourite-container">
-              {favorites.map(item => (
-                <div key={item.id} className="favourite-panel">
-                  <div className="favourite-footer">
-                    <p className="favourite-name">{item.name}</p>
-                    <button 
-                      className="edit-btn"
-                      onClick={() => {}}
-                    >
-                      ✏️
-                    </button>
+          {activeIndex === signupIndex ? (
+            <SignUp
+              onRegistered={() => {
+                setJustRegistered(true)
+                setActiveIndex(loginIndex)
+              }}
+              onGoToLogin={() => setActiveIndex(loginIndex)}
+              onAboutClick={() => setActiveIndex(aboutIndex)}
+            />
+          ) : activeIndex === loginIndex ? (
+            <Login
+              justRegistered={justRegistered}
+              onLoggedIn={() => {
+                setJustRegistered(false)
+                setActiveIndex(0)
+              }}
+              onGoToSignUp={() => setActiveIndex(signupIndex)}
+              onAboutClick={() => setActiveIndex(aboutIndex)}
+            />
+          ) : activeIndex === aboutIndex ? (
+            <About
+              onGoToSignUp={() => setActiveIndex(signupIndex)}
+              onGoToLogin={() => setActiveIndex(loginIndex)}
+            />
+          ) : (
+            <>
+              <h1>{currentContent.title}</h1>
+              {activeIndex === 2 ? (
+                <div className="outfits-page">
+                  <div className="weather-panel">
+                    <div className="weather-icon">☀️</div>
+                    <div className="weather-info">
+                      <p className="weather-temp">72°F</p>
+                      <p className="weather-condition">Sunny</p>
+                    </div>
+                  </div>
+                  <div className="outfits-content">
+                    {/* Outfits content will go here */}
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : activeIndex === 4 ? (
-            <div className="settings-container">
-              <div className="profile-section">
-                <div className="profile-icon">👤</div>
-                <p className="profile-email">user@example.com</p>
-              </div>
-              <div className="settings-panel">
-                <div className="settings-item">
-                  <span className="dot">•</span>
-                  <div className="settings-title">Passwords</div>
-                  <div className="settings-description">Change my passwords</div>
+              ) : activeIndex === 3 ? (
+                <div className="favourite-container">
+                  {favorites.map(item => (
+                    <div key={item.id} className="favourite-panel">
+                      <div className="favourite-footer">
+                        <p className="favourite-name">{item.name}</p>
+                        <button
+                          className="edit-btn"
+                          onClick={() => {}}
+                        >
+                          ✏️
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <div className="settings-panel">
-                <div className="settings-item">
-                  <span className="dot">•</span>
-                  <div className="settings-title">Theme</div>
-                  <div className="settings-description">Choose a theme</div>
+              ) : activeIndex === 4 ? (
+                <div className="settings-container">
+                  <div className="profile-section">
+                    <div className="profile-icon">👤</div>
+                    <p className="profile-email">user@example.com</p>
+                  </div>
+                  <div className="settings-panel">
+                    <div className="settings-item">
+                      <span className="dot">•</span>
+                      <div className="settings-title">Passwords</div>
+                      <div className="settings-description">Change my passwords</div>
+                    </div>
+                  </div>
+                  <div className="settings-panel">
+                    <div className="settings-item">
+                      <span className="dot">•</span>
+                      <div className="settings-title">Theme</div>
+                      <div className="settings-description">Choose a theme</div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ) : (
-            <p>{currentContent.content}</p>
+              ) : (
+                <p>{currentContent.content}</p>
+              )}
+            </>
           )}
         </div>
       </div>
