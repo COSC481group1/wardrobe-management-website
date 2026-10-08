@@ -1,13 +1,21 @@
-// Talks to the C# backend. The endpoint paths below are ASSUMED --
-// open {apiurl}/swagger (e.g. localhost:PORT/swagger) while the backend is
-// running to see the real paths and field names, then edit them here.
-// This is the only file that should need changing for that.
-const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:5000";
+// Talks to the C# backend (WardrobeBackend).
+//
+// API_BASE is empty on purpose: requests go to the same origin the page was
+// loaded from. During `npm run dev` the Vite proxy (see vite.config.js)
+// forwards /User to https://localhost:7163; when the built site is served by
+// the backend itself it is already the same origin. When the backend moves to
+// AWS, serve the site from there too, or set VITE_API_URL to the new address.
+const API_BASE = import.meta.env.VITE_API_URL ?? "";
 
+// Paths come from the backend controllers -- check {apiurl}/swagger.
 export const ENDPOINTS = {
-  register: "/api/auth/register",
-  login: "/api/auth/login",
+  register: "/User/CreateAccount",
+  login: "/api/auth/login", // not wired up yet -- the backend has GET /User/SignIn
 };
+
+// Lucas's CreateAccount is a plain GET with query-string parameters. If
+// Swagger shows it as POST instead, change this one word.
+const REGISTER_METHOD = "GET";
 
 // Per Lucas's plan: login returns a token, the frontend stores it as a
 // cookie, then sends it in the Authorization header on later requests
@@ -36,45 +44,61 @@ export function isLoggedIn() {
 }
 
 // Attach this to every request to a user endpoint, e.g.
-//   fetch(`${API_BASE}/api/closet`, { headers: authHeader() })
+//   fetch(`${API_BASE}/User/Something`, { headers: authHeader() })
 export function authHeader() {
   const token = getToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-async function post(path, body) {
+// One place that makes every backend call. `query` becomes the query string
+// (URLSearchParams encodes special characters in passwords for us); `body`,
+// if given, is sent as JSON. The backend may answer with JSON or plain text,
+// so the reply is read as text first.
+async function callApi(method, path, { query, body } = {}) {
+  const queryString = query ? `?${new URLSearchParams(query)}` : "";
+
   let response;
   try {
-    response = await fetch(`${API_BASE}${path}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+    response = await fetch(`${API_BASE}${path}${queryString}`, {
+      method,
+      headers: body ? { "Content-Type": "application/json" } : undefined,
+      body: body ? JSON.stringify(body) : undefined,
     });
   } catch {
     throw new Error("Can't reach the server. Check your connection and try again.");
   }
 
-  let data = {};
+  const text = await response.text();
+  let data = text;
   try {
-    data = await response.json();
+    data = JSON.parse(text);
   } catch {
-    /* empty or non-JSON body */
+    /* plain-text or empty reply -- keep the raw text */
   }
 
   if (!response.ok) {
-    throw new Error(data.message || data.error || "Something went wrong. Please try again.");
+    const message =
+      typeof data === "string" ? data : data?.message || data?.title || data?.error;
+    if (message) throw new Error(message);
+    if (response.status >= 500) {
+      throw new Error("The server isn't responding. Make sure the backend is running.");
+    }
+    throw new Error("Something went wrong. Please try again.");
   }
   return data;
 }
 
-// Email + password only -- the team settled on this over email+username+password.
+// The backend's parameter is called "username"; we send the email there,
+// since the team settled on email + password only.
 export function registerUser({ email, password }) {
-  return post(ENDPOINTS.register, { email, password });
+  return callApi(REGISTER_METHOD, ENDPOINTS.register, {
+    query: { username: email, password },
+  });
 }
 
 export async function loginUser({ email, password }) {
-  const data = await post(ENDPOINTS.login, { email, password });
-  if (!data.token) {
+  const data = await callApi("POST", ENDPOINTS.login, { body: { email, password } });
+  if (!data?.token) {
     throw new Error("Login worked but the server sent no token.");
   }
   setToken(data.token);
