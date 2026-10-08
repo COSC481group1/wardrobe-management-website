@@ -22,7 +22,6 @@ public class Article
         Tags = tags.ToArray()
     };
 
-
     public Category category;
     public string name;
     public string description;

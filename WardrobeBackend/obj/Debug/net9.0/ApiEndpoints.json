@@ -13,7 +13,7 @@
     "ContainingType": "WardrobeBackend.Controllers.UserController",
     "Method": "CreateUser",
     "RelativePath": "User/CreateAccount",
-    "HttpMethod": "GET",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -98,15 +98,5 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "WardrobeBackend.Controllers.WardrobeController",
-    "Method": "Test",
-    "RelativePath": "Wardrobe/test",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
   }
 ]

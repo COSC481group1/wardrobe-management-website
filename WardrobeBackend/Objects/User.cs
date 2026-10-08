@@ -3,7 +3,7 @@ using Npgsql;
 using System.Security.Cryptography;
 using WardrobeBackend.Services;
 
-namespace WardrobeBackend.Database;
+namespace WardrobeBackend.Objects;
 
 public class User
 {

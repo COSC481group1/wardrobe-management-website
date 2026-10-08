@@ -24,14 +24,14 @@ public class UserController : ControllerBase
         _tokenProvider = tokenProvider;
     }
 
-    [HttpGet("CreateAccount")]
+    [HttpPost("CreateAccount")]
     public async Task CreateUser(string username, string password) =>
-        await Database.User.SaveUserAsync(username, password);
+        await Objects.User.SaveUserAsync(username, password);
 
     [HttpGet("SignIn")]
     public object SignIn(string username, string password)
     {
-        Database.User user = new();
+        User user = new();
         if (user.GetUser(username) && user.CheckPassword(password))
         {
             return _tokenProvider.CreateToken(username);

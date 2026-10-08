@@ -27,7 +27,10 @@ namespace WardrobeBackend
             builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("Database"));
             builder.Services.AddScoped<IDbConnectionFactory, RdsIamConnectionFactory>();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+            });
 
             builder.Services.AddSwaggerDocument(document =>
             {
@@ -72,7 +75,7 @@ namespace WardrobeBackend
             app.UseOpenApi();
             
             using var scope = app.Services.CreateScope();
-            Database.Database.ConnectionFactory = scope.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
+            Database.ConnectionFactory = scope.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
 
             app.UseSwaggerUi(settings =>
             {
