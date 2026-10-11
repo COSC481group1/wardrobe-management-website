@@ -5,17 +5,13 @@
 // forwards /User to https://localhost:7163; when the built site is served by
 // the backend itself it is already the same origin. When the backend moves to
 // AWS, serve the site from there too, or set VITE_API_URL to the new address.
-const API_BASE = import.meta.env.VITE_API_URL ?? "";
+const API_BASE = "https://localhost:7163";
 
 // Paths come from the backend controllers -- check {apiurl}/swagger.
 export const ENDPOINTS = {
   register: "/User/CreateAccount",
-  login: "/api/auth/login", // not wired up yet -- the backend has GET /User/SignIn
+  login: "/User/SignIn",
 };
-
-// Lucas's CreateAccount is a plain GET with query-string parameters. If
-// Swagger shows it as POST instead, change this one word.
-const REGISTER_METHOD = "GET";
 
 // Per Lucas's plan: login returns a token, the frontend stores it as a
 // cookie, then sends it in the Authorization header on later requests
@@ -65,7 +61,7 @@ async function callApi(method, path, { query, body } = {}) {
       body: body ? JSON.stringify(body) : undefined,
     });
   } catch {
-    throw new Error("Can't reach the server. Check your connection and try again.");
+    throw new Error("Bad call: " + `${API_BASE}${path}${queryString}`);
   }
 
   const text = await response.text();
@@ -79,7 +75,7 @@ async function callApi(method, path, { query, body } = {}) {
   if (!response.ok) {
     const message =
       typeof data === "string" ? data : data?.message || data?.title || data?.error;
-    if (message) throw new Error(message);
+    if (message) throw new Error(`${API_BASE}${path}${queryString}` + ": Response code did not indicate success: " + message);
     if (response.status >= 500) {
       throw new Error("The server isn't responding. Make sure the backend is running.");
     }
@@ -91,13 +87,14 @@ async function callApi(method, path, { query, body } = {}) {
 // The backend's parameter is called "username"; we send the email there,
 // since the team settled on email + password only.
 export function registerUser({ email, password }) {
-  return callApi(REGISTER_METHOD, ENDPOINTS.register, {
+  return callApi("POST", ENDPOINTS.register, {
     query: { username: email, password },
   });
 }
 
 export async function loginUser({ email, password }) {
-  const data = await callApi("POST", ENDPOINTS.login, { body: { email, password } });
+  const data = await callApi("GET", ENDPOINTS.login, 
+    { query: [ ["username", email], ["password", password ] ]});
   if (!data?.token) {
     throw new Error("Login worked but the server sent no token.");
   }

@@ -34,7 +34,10 @@ public class UserController : ControllerBase
         User user = new();
         if (user.GetUser(username) && user.CheckPassword(password))
         {
-            return _tokenProvider.CreateToken(username);
+            return new
+            { 
+                token = _tokenProvider.CreateToken(username)
+            };
         }
         return BadRequest();
     }

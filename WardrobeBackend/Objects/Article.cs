@@ -1,4 +1,6 @@
-﻿namespace WardrobeBackend.Objects;
+﻿using Npgsql;
+
+namespace WardrobeBackend.Objects;
 
 public class Article
 {
@@ -27,6 +29,20 @@ public class Article
     public string description;
     public string palette;
     public List<string> tags;
+    private bool created;
+
+    private string CrushTags()
+    {
+        if (tags == null)
+        {
+            return "";
+        }
+        if (tags.Count == 1)
+        {
+            return tags[0];
+        }
+        return tags.Aggregate((t1, t2) => t1 + (char)8203 + t2);
+    }
 }
 
 public enum Category
