@@ -70,6 +70,9 @@ namespace WardrobeBackend
 
             var app = builder.Build();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseOpenApi();
