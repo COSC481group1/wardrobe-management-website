@@ -1,7 +1,44 @@
 [
   {
-    "ContainingType": "WardrobeBackend.Controllers.UserController",
+    "ContainingType": "WardrobeBackend.Controllers.TestDbController",
     "Method": "Get",
+    "RelativePath": "api/TestDb",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WardrobeBackend.Controllers.UserController",
+    "Method": "CreateUser",
+    "RelativePath": "User/CreateAccount",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "password",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WardrobeBackend.Controllers.UserController",
+    "Method": "SignIn",
     "RelativePath": "User/SignIn",
     "HttpMethod": "GET",
     "IsController": true,
@@ -9,6 +46,11 @@
     "Parameters": [
       {
         "Name": "username",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "password",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -56,15 +98,5 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "WardrobeBackend.Controllers.WardrobeController",
-    "Method": "Test",
-    "RelativePath": "Wardrobe/test",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
   }
 ]

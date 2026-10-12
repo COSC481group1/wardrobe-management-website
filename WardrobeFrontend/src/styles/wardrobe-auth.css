@@ -1,0 +1,447 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;600;700&display=swap");
+
+:root {
+  --violet: #8b5fbf;
+  --violet-deep: #5f3f92;
+  --violet-soft: #b79bec;
+  --lavender: #ece2fb;
+  --lavender-bg: #faf7ff;
+  --blush: #f4a6c9;
+  --ink: #2e2245;
+  --muted: #8377a0;
+  --error: #d6456b;
+  --ok: #4f9d72;
+  --font-display: "Quicksand", "Nunito", sans-serif;
+  --font-body: "Nunito", system-ui, sans-serif;
+}
+
+.auth-page,
+.about-page {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--lavender-bg);
+  min-height: 100vh;
+}
+
+/* Scoped to .auth-page/.about-page, not global -- this file is imported
+   into Justin's app bundle, so a bare h1/h2/h3 rule would also reskin
+   his existing Homepage/Closet/etc. headings. */
+.auth-page h1,
+.auth-page h2,
+.auth-page h3,
+.about-page h1,
+.about-page h2,
+.about-page h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ---------- Auth layout ---------- */
+.auth-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-columns {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(280px, 5fr) 6fr;
+}
+
+.auth-panel {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(165deg, var(--violet) 0%, var(--violet-deep) 100%);
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.auth-panel::before,
+.auth-panel::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.auth-panel::before {
+  width: 220px;
+  height: 220px;
+  background: rgba(244, 166, 201, 0.35);
+  top: -60px;
+  right: -60px;
+}
+
+.auth-panel::after {
+  width: 160px;
+  height: 160px;
+  background: rgba(255, 255, 255, 0.14);
+  bottom: -40px;
+  left: -40px;
+}
+
+.garment-tag {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  color: var(--violet-deep);
+  width: min(320px, 100%);
+  padding: 3.25rem 1.75rem 2rem;
+  border-radius: 26px;
+  text-align: center;
+  transform: rotate(-3deg);
+  box-shadow: 0 16px 32px rgba(47, 25, 82, 0.25);
+}
+
+.garment-tag::before {
+  content: "";
+  position: absolute;
+  top: 1.1rem;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  border-radius: 50%;
+  background: var(--lavender-bg);
+  box-shadow: inset 0 0 0 3px var(--blush);
+}
+
+.garment-tag-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.garment-tag-line {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.auth-main {
+  padding: 2rem clamp(1.25rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-about-link {
+  align-self: flex-end;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--violet);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-about-link:hover {
+  color: var(--violet-deep);
+}
+
+.link-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--violet);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: var(--violet-deep);
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  margin: auto 0;
+}
+
+.auth-card h1 {
+  margin: 0;
+  font-size: 2.25rem;
+}
+
+.auth-subtitle {
+  margin: 0.5rem 0 1.75rem;
+  color: var(--muted);
+}
+
+.auth-footer {
+  margin-top: 1.5rem;
+  color: var(--muted);
+}
+
+/* ---------- Form fields ---------- */
+.field {
+  margin-bottom: 1.1rem;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.field-control {
+  position: relative;
+}
+
+.field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 0.95rem;
+  font: inherit;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--lavender);
+  border-radius: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.field input:focus {
+  border-color: var(--violet-soft);
+}
+
+.field input[aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+.field-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.7rem;
+  transform: translateY(-50%);
+  background: none;
+  border: 0;
+  color: var(--violet);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.field-hint,
+.field-error {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+}
+
+.field-hint {
+  color: var(--muted);
+}
+
+.field-error,
+.form-error {
+  color: var(--error);
+}
+
+.form-error {
+  margin: 0 0 1rem;
+}
+
+.form-notice {
+  margin: 0 0 1.25rem;
+  padding: 0.7rem 0.95rem;
+  color: var(--ok);
+  background: #e9f6ee;
+  border-radius: 14px;
+}
+
+/* ---------- Buttons ---------- */
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0.8rem 1.6rem;
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--violet);
+  border: 2px solid var(--violet);
+}
+
+.auth-card .btn-primary {
+  width: 100%;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background: var(--violet-deep);
+  border-color: var(--violet-deep);
+  box-shadow: 0 8px 20px rgba(139, 95, 191, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  color: var(--violet-deep);
+  background: transparent;
+  border: 2px solid var(--violet-soft);
+}
+
+.btn-secondary:hover {
+  background: var(--lavender);
+}
+
+/* ---------- Focus ---------- */
+input:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--blush);
+  outline-offset: 2px;
+}
+
+/* ---------- About page ---------- */
+.about-page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 3rem clamp(1.25rem, 5vw, 2rem) 4rem;
+  box-sizing: border-box;
+}
+
+.about-hero {
+  position: relative;
+  text-align: center;
+}
+
+.about-hero::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--lavender) 0%, transparent 70%);
+  top: -80px;
+  right: -80px;
+  z-index: -1;
+}
+
+.about-hero h1 {
+  margin: 0 auto 1rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  max-width: 22ch;
+  color: var(--violet-deep);
+}
+
+.about-hero p {
+  margin: 0 auto;
+  max-width: 60ch;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.about-section {
+  margin-top: 3.5rem;
+}
+
+.about-section h2 {
+  margin: 0 0 1.25rem;
+  font-size: 1.75rem;
+  color: var(--violet-deep);
+}
+
+.about-steps {
+  display: grid;
+  gap: 1.25rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.about-steps li {
+  counter-increment: step;
+  padding-left: 3rem;
+  position: relative;
+}
+
+.about-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  width: 2.1rem;
+  height: 2.1rem;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: #fff;
+  background: linear-gradient(155deg, var(--violet) 0%, var(--violet-deep) 100%);
+  border-radius: 50%;
+}
+
+.about-steps h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.2rem;
+}
+
+.about-steps p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.about-team {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0;
+  list-style: none;
+}
+
+.about-team li {
+  padding: 0.45rem 1rem;
+  color: var(--violet-deep);
+  background: var(--lavender);
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 760px) {
+  .auth-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-panel {
+    padding: 1.5rem 1.5rem 2rem;
+  }
+
+  .garment-tag {
+    padding-top: 2.75rem;
+    transform: rotate(-2deg);
+  }
+
+  .garment-tag-name {
+    font-size: 1.75rem;
+  }
+}

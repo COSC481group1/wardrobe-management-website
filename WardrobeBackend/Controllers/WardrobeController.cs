@@ -42,10 +42,5 @@ public class WardrobeController : ControllerBase
         return [];
     }
 
-    [HttpGet("test")]
-    public object Test()
-    {
-        return new { Test = "You claim to be " + CurrentUserEmail };
-    }
 }
 
