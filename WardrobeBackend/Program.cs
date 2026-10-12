@@ -67,6 +67,9 @@ namespace WardrobeBackend
                 });
 
             builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
+            
+            builder.Services.AddMemoryCache();                 
+            builder.Services.AddHttpClient<WeatherService>();
 
             var app = builder.Build();
 
@@ -84,6 +87,7 @@ namespace WardrobeBackend
             {
                 settings.SwaggerRoutes.Add(new SwaggerUiRoute("v1", "/swagger/v1/swagger.json"));
             });
+
 
             app.UseHttpsRedirection();
             app.MapControllers();
