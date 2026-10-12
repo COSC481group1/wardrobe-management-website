@@ -5,7 +5,7 @@
 // forwards /User to https://localhost:7163; when the built site is served by
 // the backend itself it is already the same origin. When the backend moves to
 // AWS, serve the site from there too, or set VITE_API_URL to the new address.
-const API_BASE = "https://localhost:7163";
+const API_BASE = import.meta.env.VITE_API_URL ?? "";;
 
 // Paths come from the backend controllers -- check {apiurl}/swagger.
 export const ENDPOINTS = {
