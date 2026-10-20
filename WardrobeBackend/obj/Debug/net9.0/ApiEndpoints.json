@@ -66,7 +66,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "article",
+        "Name": "articleDto",
         "Type": "ArticleDto",
         "IsRequired": true
       }
