@@ -20,27 +20,15 @@ public class WardrobeController : ControllerBase
     }
 
     [HttpPost("article")]
-    public void AddArticle(ArticleDto article)
+    public void AddArticle(ArticleDto articleDto)
     {
-        string user = CurrentUserEmail;
-        if(!Article.dummyCache.TryGetValue(user, out List<Article>? articles))
-        {
-            articles = new List<Article>();
-            Article.dummyCache.Add(user, articles);
-        }
-        articles.Add(Article.FromDto(article));
+        Article newArticle = Article.FromDto(articleDto);
+        newArticle.CreateOrUpdate(CurrentUserEmail);
     }
 
     [HttpGet("articles")]
-    public ArticleDto[] GetArticels()
-    {
-        string user = CurrentUserEmail;
-        if (Article.dummyCache.TryGetValue(user, out List<Article>? articles))
-        {
-            return articles.Select(a => a.ToDto()).ToArray();
-        }
-        return [];
-    }
+    public ArticleDto[] GetArticels() =>
+        [.. new Article().FindAllInPlace(CurrentUserEmail).Select(a => a.ToDto())];
 
 }
 
