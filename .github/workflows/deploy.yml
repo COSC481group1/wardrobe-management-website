@@ -1,0 +1,104 @@
+
+name: Deploy Wardrobe Management
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-2
+  APPLICATION_NAME: wardrobe-management
+  ENVIRONMENT_NAME: Wardrobe-management-env
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Get repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Install Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: WardrobeFrontend/package-lock.json
+
+      # 3. Install .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      # 4. Build React frontend
+      - name: Install frontend dependencies
+        working-directory: WardrobeFrontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: WardrobeFrontend
+        run: npm run build
+
+      # 5. Publish ASP.NET Core backend
+      - name: Publish backend
+        run: |
+          dotnet publish WardrobeBackend/WardrobeBackend.csproj \
+            --configuration Release \
+            --output publish
+
+      # 6. Create deployment package
+      - name: Package application
+        run: |
+          mkdir -p artifact/site
+          cp -a publish/. artifact/site/
+
+          cd artifact/site
+          zip -r ../site.zip .
+
+          cd ..
+
+          cat > aws-windows-deployment-manifest.json <<'EOF'
+          {
+            "manifestVersion": 1,
+            "deployments": {
+              "aspNetCoreWeb": [
+                {
+                  "name": "WardrobeBackend",
+                  "parameters": {
+                    "appBundle": "site.zip",
+                    "iisPath": "/",
+                    "iisWebSite": "Default Web Site"
+                  }
+                }
+              ]
+            }
+          }
+          EOF
+
+          zip deployment.zip \
+            aws-windows-deployment-manifest.json \
+            site.zip
+
+      # 7. Authenticate with AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # 8. Deploy to Elastic Beanstalk
+      - name: Deploy to Elastic Beanstalk
+        uses: aws-actions/aws-elasticbeanstalk-deploy@v1
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          application-name: ${{ env.APPLICATION_NAME }}
+          environment-name: ${{ env.ENVIRONMENT_NAME }}
+          deployment-package-path: artifact/deployment.zip
