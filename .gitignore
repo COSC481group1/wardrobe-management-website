@@ -116,3 +116,11 @@ src/.vs/config/applicationhost.config
 
 # JetBrains Rider's auto generated files
 .idea/
+
+# AWS deployment artifacts
+eb-deploy/
+publish/
+wardrobe-deployment.zip
+
+# Generated frontend build files
+WardrobeBackend/wwwroot/assets/

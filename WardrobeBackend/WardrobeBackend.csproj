@@ -16,4 +16,8 @@
     <PackageReference Include="NSwag.AspNetCore" Version="14.7.1" />
   </ItemGroup>
 
+  <ItemGroup>
+  <Content Update="wwwroot\**\*"
+           CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
