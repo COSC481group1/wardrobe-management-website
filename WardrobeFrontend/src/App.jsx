@@ -96,38 +96,51 @@ const closetItems = [
   { id: 'bottom2', category: 'Bottom', name: 'Charcoal trousers', image: 'ImageBot2.jpg', suit: 2 },
   { id: 'accessory2', category: 'Accessories', name: 'Patterned tie', image: 'ImageAcs2.jpg', suit: 2 }
 ]
+// Load all clothing images from src/assets
+const clothingImages = import.meta.glob(
+  './assets/*.{jpg,jpeg,png,webp,heic}',
+  {
+    eager: true,
+    query: '?url',
+    import: 'default'
+  }
+)
+
+function getClothingImage(filename) {
+  return clothingImages[`./assets/${filename}`]
+}
 // 30 new clothing items included with the project
 const newClosetItems = [
-  { id: 'new-01', category: 'Accessories', name: 'Black beanie', image: 'new-items/item-01.jpg' },
-  { id: 'new-02', category: 'Top', name: 'Black cat crewneck', image: 'new-items/item-02.jpg' },
-  { id: 'new-03', category: 'Bottom', name: 'Black cat jean', image: 'new-items/item-03.jpg' },
-  { id: 'new-04', category: 'Top', name: 'Black crewneck sweatshirt', image: 'new-items/item-04.jpg' },
-  { id: 'new-05', category: 'Bottom', name: 'Black jean', image: 'new-items/item-05.jpg' },
-  { id: 'new-06', category: 'Top', name: 'Blue dog sweater', image: 'new-items/item-06.jpg' },
-  { id: 'new-07', category: 'Bottom', name: 'Blue star jean', image: 'new-items/item-07.jpg' },
-  { id: 'new-08', category: 'Top', name: 'Blue sweater', image: 'new-items/item-08.jpg' },
-  { id: 'new-09', category: 'Bottom', name: 'Brown and blue plaid trousers', image: 'new-items/item-09.jpg' },
-  { id: 'new-10', category: 'Accessories', name: 'Brown knit hat', image: 'new-items/item-10.jpg' },
-  { id: 'new-11', category: 'Bottom', name: 'Brown trousers', image: 'new-items/item-11.jpg' },
-  { id: 'new-12', category: 'Accessories', name: 'Cartoon dog knit hat', image: 'new-items/item-12.jpg' },
-  { id: 'new-13', category: 'Top', name: 'Dark green cat crewneck sweatshirt', image: 'new-items/item-13.jpg' },
-  { id: 'new-14', category: 'Bottom', name: 'Dark-blue trousers', image: 'new-items/item-14.jpg' },
-  { id: 'new-15', category: 'Top', name: 'Green cat sweater', image: 'new-items/item-15.jpg' },
-  { id: 'new-16', category: 'Top', name: 'Grey-blue crewneck', image: 'new-items/item-16.jpg' },
-  { id: 'new-17', category: 'Bottom', name: 'Khaki star trousers', image: 'new-items/item-17.jpg' },
-  { id: 'new-18', category: 'Bottom', name: 'Khaki trousers', image: 'new-items/item-18.jpg' },
-  { id: 'new-19', category: 'Bottom', name: 'Light-blue jean', image: 'new-items/item-19.jpg' },
-  { id: 'new-20', category: 'Top', name: 'Off-white crewneck', image: 'new-items/item-20.jpg' },
-  { id: 'new-21', category: 'Shoes', name: 'Pink and white sneaker', image: 'new-items/item-21.jpg' },
-  { id: 'new-22', category: 'Accessories', name: 'Purple cat knit hat', image: 'new-items/item-22.jpg' },
-  { id: 'new-23', category: 'Accessories', name: 'Rainbow knit hat', image: 'new-items/item-23.jpg' },
-  { id: 'new-24', category: 'Shoes', name: 'Sail and Brown sneaker', image: 'new-items/item-24.jpg' },
-  { id: 'new-25', category: 'Shoes', name: 'White Sneaker', image: 'new-items/item-25.jpg' },
-  { id: 'new-26', category: 'Top', name: 'White bear sweater', image: 'new-items/item-26.jpg' },
-  { id: 'new-27', category: 'Accessories', name: 'White cat fish knit hat', image: 'new-items/item-27.jpg' },
-  { id: 'new-28', category: 'Top', name: 'White crewneck', image: 'new-items/item-28.jpg' },
-  { id: 'new-29', category: 'Bottom', name: 'White trousers', image: 'new-items/item-29.jpg' },
-  { id: 'new-30', category: 'Top', name: 'Yellow cat sweater', image: 'new-items/item-30.jpg' }
+  { id: 'new-01', category: 'Accessories', name: 'Black beanie', source: getClothingImage('Black beanie.jpg') },
+  { id: 'new-02', category: 'Top', name: 'Black cat crewneck', source: getClothingImage('Black cat crewneck.jpg') },
+  { id: 'new-03', category: 'Bottom', name: 'Black cat jean', source: getClothingImage('Black cat jean.jpg') },
+  { id: 'new-04', category: 'Top', name: 'Black crewneck sweatshirt', source: getClothingImage('Black crweneck sweatshirt.jpg') },
+  { id: 'new-05', category: 'Bottom', name: 'Black jean', source: getClothingImage('Black jean.jpg') },
+  { id: 'new-06', category: 'Top', name: 'Blue dog sweater', source: getClothingImage('Blue dog sweater.jpg') },
+  { id: 'new-07', category: 'Bottom', name: 'Blue star jean', source: getClothingImage('Blue star jean.jpg') },
+  { id: 'new-08', category: 'Top', name: 'Blue sweater', source: getClothingImage('Blue sweater.jpg') },
+  { id: 'new-09', category: 'Bottom', name: 'Brown and blue plaid trousers', source: getClothingImage('Brown and blur plaid trousers.jpg') },
+  { id: 'new-10', category: 'Accessories', name: 'Brown knit hat', source: getClothingImage('Brown knit hat.jpg') },
+  { id: 'new-11', category: 'Bottom', name: 'Brown trousers', source: getClothingImage('Brown trousers.jpg') },
+  { id: 'new-12', category: 'Accessories', name: 'Cartoon dog knit hat', source: getClothingImage('Cartoon dog knit hat.jpg') },
+  { id: 'new-13', category: 'Top', name: 'Dark green cat crewneck sweatshirt', source: getClothingImage('Dark green cat crewneck sweatshirt .jpg') },
+  { id: 'new-14', category: 'Bottom', name: 'Dark-blue trousers', source: getClothingImage('Dark-blue trousers.jpg') },
+  { id: 'new-15', category: 'Top', name: 'Green cat sweater', source: getClothingImage('Green cat sweater.jpg') },
+  { id: 'new-16', category: 'Top', name: 'Grey-blue crewneck', source: getClothingImage('Grey-blue crewneck.jpg') },
+  { id: 'new-17', category: 'Bottom', name: 'Khaki star trousers', source: getClothingImage('Khaki start trousers.jpg') },
+  { id: 'new-18', category: 'Bottom', name: 'Khaki trousers', source: getClothingImage('Khaki trousers.jpg') },
+  { id: 'new-19', category: 'Bottom', name: 'Light-blue jean', source: getClothingImage('Light-blue jean.jpg') },
+  { id: 'new-20', category: 'Top', name: 'Off-white crewneck', source: getClothingImage('Off-white crewneck.jpg') },
+  { id: 'new-21', category: 'Shoes', name: 'Pink and white sneaker', source: getClothingImage('Pink and white sneaker.jpg') },
+  { id: 'new-22', category: 'Accessories', name: 'Purple cat knit hat', source: getClothingImage('Purple cat knit hat.jpg') },
+  { id: 'new-23', category: 'Accessories', name: 'Rainbow knit hat', source: getClothingImage('Rainbow knit hat.jpg') },
+  { id: 'new-24', category: 'Shoes', name: 'Sail and Brown sneaker', source: getClothingImage('Sail and Brown sneaker.jpg') },
+  { id: 'new-25', category: 'Shoes', name: 'White Sneaker', source: getClothingImage('White Sneaker.jpg') },
+  { id: 'new-26', category: 'Top', name: 'White bear sweater', source: getClothingImage('White bear sweater.jpg') },
+  { id: 'new-27', category: 'Accessories', name: 'White cat fish knit hat', source: getClothingImage('White cat fish knit hat.jpg') },
+  { id: 'new-28', category: 'Top', name: 'White crewneck', source: getClothingImage('White crewneck.jpg') },
+  { id: 'new-29', category: 'Bottom', name: 'White trousers', source: getClothingImage('White trousers.jpg') },
+  { id: 'new-30', category: 'Top', name: 'Yellow cat sweater', source: getClothingImage('Yellow cat sweater.jpg') }
 ]
 // save, load, or delete uploaded clothing images in the browser database
 async function uploadedClosetStore(action, items = []) {
