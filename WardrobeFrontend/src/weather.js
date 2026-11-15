@@ -1,34 +1,72 @@
+// keep the default destination and weather information in browser storage
 export const DEFAULT_LOCATION_KEY = 'wardrobe-default-location'
 const searchCache = new Map()
 const weatherCache = new Map()
+// get the saved default destination from local storage
 export function readDefaultLocation() {
   try {
     const value = JSON.parse(localStorage.getItem(DEFAULT_LOCATION_KEY) || 'null')
     return value && typeof value.label === 'string' && Number.isFinite(value.lat) && Number.isFinite(value.lon) ? value : null
   } catch { return null }
 }
+// request data from the weather or location service
 async function getJson(url) {
   const response = await fetch(url, { signal: AbortSignal.timeout(15000) })
   if (!response.ok) throw new Error('The location or weather service is unavailable. Please try again.')
   return response.json()
 }
-export async function searchLocations(query) {
-  const key = query.trim().toLowerCase()
-  if (searchCache.has(key)) return searchCache.get(key)
-  const url = new URL('https://photon.komoot.io/api/')
-  url.search = new URLSearchParams({ q: query.trim(), limit: '5', lang: 'en' })
+//format the location name so users can recognize the result
+function locationLabel(parts) {
+  return [...new Set(parts.filter(Boolean).map(value => String(value).trim()).filter(Boolean))].join(', ')
+}
+
+//search Open-Meteo for cities, states, and postal codes
+async function searchOpenMeteo(query) {
+  const url = new URL('https://geocoding-api.open-meteo.com/v1/search')
+  url.search = new URLSearchParams({ name: query, count: '10', language: 'en', format: 'json' })
   const data = await getJson(url)
-  const places = (data.features || []).map(feature => {
+  return (data.results || []).map(p => ({
+    lat: p.latitude, lon: p.longitude,
+    label: locationLabel([p.name, p.admin1, p.country, p.postcodes?.[0]])
+  })).filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lon) && p.label)
+}
+
+//search Photon for street addresses and other detailed locations
+async function searchPhoton(query) {
+  const url = new URL('https://photon.komoot.io/api/')
+  url.search = new URLSearchParams({ q: query, limit: '8', lang: 'en' })
+  const data = await getJson(url)
+  return (data.features || []).map(feature => {
     const p = feature.properties || {}
     const [lon, lat] = feature.geometry?.coordinates || []
     const street = [p.housenumber, p.street].filter(Boolean).join(' ')
-    const parts = [p.name, street, p.city || p.town || p.village, p.state, p.postcode, p.country].filter(Boolean)
-    return { lat, lon, label: [...new Set(parts)].join(', ') }
-  }).filter(place => Number.isFinite(place.lat) && Number.isFinite(place.lon) && place.label)
-  const unique = places.filter((place, index) => places.findIndex(other => other.label === place.label) === index)
+    return { lat, lon, label: locationLabel([p.name, street, p.city || p.town || p.village, p.state, p.postcode, p.country]) }
+  }).filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lon) && p.label)
+}
+
+//try both location services; one service being down should not break search
+export async function searchLocations(query) {
+  const text = query.trim()
+  if (!text) return []
+  const key = text.toLowerCase()
+  if (searchCache.has(key)) return searchCache.get(key)
+
+  //a shorter city query also helps when a user types 'Detroit, Michigan'
+  const city = text.split(',')[0].trim()
+  const tasks = [searchOpenMeteo(text), searchPhoton(text)]
+  if (city !== text && city.length >= 2) tasks.push(searchOpenMeteo(city))
+  const responses = await Promise.allSettled(tasks)
+  const places = responses.flatMap(result => result.status === 'fulfilled' ? result.value : [])
+  const unique = places.filter((place, index) =>
+    places.findIndex(other => other.label.toLowerCase() === place.label.toLowerCase()) === index
+  ).slice(0, 12)
+  if (!unique.length && responses.every(result => result.status === 'rejected')) {
+    throw new Error('Both location services are unavailable. Check your internet connection and try again.')
+  }
   searchCache.set(key, unique)
   return unique
 }
+// get the current weather for the selected destination
 export async function getWeather(place) {
   const key = `${place.lat},${place.lon}`
   const cached = weatherCache.get(key)
@@ -42,6 +80,7 @@ export async function getWeather(place) {
   weatherCache.set(key, result)
   return result
 }
+// convert the weather code to a readable condition and icon
 export function describeWeather(code) {
   if (code === 0) return { label: 'Clear skies', icon: '☀' }
   if (code <= 2) return { label: 'Partly cloudy', icon: '⛅' }
@@ -51,6 +90,7 @@ export function describeWeather(code) {
   if (code >= 95) return { label: 'Thunderstorms', icon: '⛈' }
   return { label: 'Rain or drizzle', icon: '☂' }
 }
+// give clothing suggestions based on the current weather
 export function weatherAdvice(weather) {
   const tips = []
   if (weather.feelsLike < 10) tips.push('Add a warm coat and layers over your suit.')

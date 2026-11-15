@@ -2829,3 +2829,142 @@ html[data-theme=dark] .generated-suit .closet-item {
   .outfit-generator { padding: 18px; }
   .favorites-page { margin: 12px; }
 }
+
+.editorial-shell{min-height:100vh;background:color-mix(in srgb,var(--accent-color,#7046d6) 7%,#faf9f7);color:#242026}.editorial-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:22px;padding:20px 3.5%;background:#fff;border-bottom:1px solid #eae6e3;min-height:96px}.editorial-left,.editorial-right{display:flex;align-items:center;gap:19px}.editorial-right{justify-content:flex-end}.editorial-header button{background:transparent;border:0;color:#252127;cursor:pointer;font-size:12px;letter-spacing:.045em;white-space:nowrap}.editorial-header button:hover,.editorial-header button.active{color:var(--accent-color,#7046d6)}.editorial-menu{display:flex;gap:9px;align-items:center}.editorial-intro{border-left:1px solid #ddd!important;padding-left:16px}.editorial-logo{font-family:Georgia,serif!important;font-size:24px!important;letter-spacing:.19em!important;text-align:center;line-height:1.15}.editorial-logo span{display:block;font:8px system-ui;letter-spacing:.27em;margin-top:6px}.header-search{display:flex;align-items:center;border-bottom:1px solid #a9a2aa;max-width:200px}.header-search input{min-width:0;width:140px;padding:9px 0;border:0;outline:0;background:transparent;font-size:12px}.header-search button{font-size:23px!important}.header-theme{display:flex;align-items:center;gap:9px;font-size:11px}.header-theme .home-theme-picker{display:flex;align-items:center;margin:0;padding:0;background:none;border:0;box-shadow:none}.header-theme .home-theme-picker label{display:none}.header-theme .home-color-slider{width:94px;max-width:94px;margin:0}.editorial-menu-panel{position:absolute;z-index:20;top:90px;left:3%;background:#fff;box-shadow:0 12px 40px #0002;padding:20px;display:grid;gap:8px;min-width:210px}.editorial-menu-panel button{text-align:left;border:0;background:transparent;padding:11px;cursor:pointer}.editorial-menu-panel button:hover{background:var(--accent-soft,#eee)}.editorial-heading{text-align:center;padding:40px 12px 32px}.editorial-heading p,.editorial-story>p:first-child{letter-spacing:.25em;font-size:10px}.editorial-heading h1{font:normal clamp(30px,3.5vw,54px) Georgia,serif;margin:10px 0}.editorial-heading span{font-size:13px;color:#6b6570}.editorial-shell .outfits-layout{max-width:1400px;margin:0 auto 70px;display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:24px;align-items:start;padding:0 3.5%}.editorial-shell .outfit-generator{grid-column:1;grid-row:1;background:#fff;min-width:0}.editorial-shell .weather-panel{grid-column:2;grid-row:1;background:#fff;min-width:0}.editorial-story{max-width:850px;margin:30px auto;background:#fff;text-align:center;padding:85px 30px}.editorial-story h2{font:normal 42px Georgia,serif}.editorial-story p{line-height:1.8}.style-chat{position:fixed;bottom:26px;right:26px;z-index:40}.chat-launch{height:58px;width:58px;border-radius:50%;background:var(--accent-color,#7046d6);color:#fff;font-size:29px;border:0;cursor:pointer;box-shadow:0 8px 24px #0003}.chat-tooltip{position:absolute;right:67px;top:15px;white-space:nowrap;padding:10px 13px;background:#242026;color:white;border-radius:6px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .2s}.chat-launch:hover+.chat-tooltip,.chat-launch:focus+.chat-tooltip{opacity:1}.chat-popover{position:absolute;bottom:73px;right:0;width:min(350px,calc(100vw - 40px));padding:23px;background:white;box-shadow:0 12px 48px #0003;border:1px solid #eee;display:grid;gap:14px}.chat-popover-title{display:flex;justify-content:space-between;align-items:center}.chat-popover-title button{border:0;background:none;font-size:24px;cursor:pointer}.chat-popover label{font-size:13px}.chat-popover textarea{width:100%;min-height:100px;border:1px solid #d9d5d9;padding:12px;font:inherit;resize:vertical}.outfit-search-note{font-size:12px;color:#777}@media(max-width:1100px){.editorial-header{grid-template-columns:1fr auto;gap:16px}.editorial-logo{grid-column:1/-1;grid-row:1}.editorial-left{grid-column:1;grid-row:2;flex-wrap:wrap}.editorial-right{grid-column:2;grid-row:2;flex-wrap:wrap}.editorial-shell .outfits-layout{grid-template-columns:minmax(0,1fr) 270px}}@media(max-width:760px){.editorial-header{display:flex;flex-direction:column}.editorial-left,.editorial-right{justify-content:center;flex-wrap:wrap}.editorial-shell .outfits-layout{display:flex;flex-direction:column}.editorial-shell .outfit-generator,.editorial-shell .weather-panel{width:100%}.editorial-shell .weather-panel{order:2}.editorial-heading{padding:26px 10px}.header-theme{width:100%;justify-content:center}}
+
+/* Keep the header color slider thin and long, without a theme label */
+.editorial-header .header-theme .home-theme-picker {width:220px;max-width:220px}
+.editorial-header .header-theme .home-color-slider {width:220px;max-width:220px;height:7px;border:0;background:linear-gradient(to right,#7046d6,#8b5cf6,#ec4899,#c2410c,#9a6b47,#6b4f3b,#111,#777,#b0b0b0,#e5e5e5,#2563eb,#06b6d4,#16a34a,#eab308)}
+.editorial-header .header-theme .home-color-slider::-webkit-slider-thumb {width:16px;height:16px;border:2px solid #fff}
+.editorial-header .header-theme .home-color-slider::-moz-range-thumb {width:12px;height:12px;border:2px solid #fff}
+.editorial-right > button[aria-label="Favourites"], .editorial-right > button[aria-label="Profile"] {display:inline-flex;align-items:center;justify-content:center;font-size:25px;min-width:32px}
+@media(max-width:760px){.editorial-header .header-theme{width:auto}.editorial-header .header-theme .home-theme-picker,.editorial-header .header-theme .home-color-slider{width:190px;max-width:190px}}
+
+/* keep the page content spaced below the header after removing the editorial headings */
+.editorial-shell .outfits-layout { padding-top: 28px; }
+.editorial-shell .editorial-story { margin-top: 42px; }
+
+/* Make the outfit search longer with smooth, button-like rounded edges */
+.editorial-header .header-search {
+  width: 260px; max-width: 260px; min-height: 39px;
+  border: 1px solid #c9c2cc; border-radius: 999px;
+  padding: 0 12px 0 17px; background: #fff;
+  transition: border-color .2s, box-shadow .2s;
+}
+.editorial-header .header-search:focus-within {
+  border-color: var(--accent-color,#7046d6);
+  box-shadow: 0 0 0 3px color-mix(in srgb,var(--accent-color,#7046d6) 12%,transparent);
+}
+.editorial-header .header-search input { width: 100%; flex: 1; padding: 9px 0; }
+.editorial-header .header-search button { padding: 0 3px; }
+@media(max-width:760px) { .editorial-header .header-search { width: min(260px,90vw); } }
+
+/* menu and color slider left, centered brand, search and icons right */
+.editorial-shell .editorial-header {
+  min-height: 76px; height: auto; padding: 12px 3%;
+  grid-template-columns: minmax(310px,1fr) auto minmax(310px,1fr);
+  gap: 16px; position: relative;
+}
+.editorial-header .editorial-left { gap: 22px; min-width: 0; }
+.editorial-header .editorial-right { gap: 16px; min-width: 0; }
+.editorial-header .editorial-logo { font-size: 22px!important; letter-spacing: .17em!important; }
+.editorial-header .editorial-logo span { font-size: 8px; margin-top: 3px; }
+.editorial-header .header-search { width: clamp(155px,18vw,290px); max-width: 290px; min-width: 0; height: 39px; }
+.editorial-header .header-search input { padding: 8px 0; font-size: 12px; }
+.editorial-header .header-search button { font-size: 24px!important; line-height: 1; }
+.editorial-header .editorial-right > button { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; min-height: 36px; padding: 3px; }
+.editorial-header .header-heart { font-size: 28px; line-height: 1; }
+.editorial-header .header-theme .home-theme-picker,
+.editorial-header .header-theme .home-color-slider { width: clamp(125px,15vw,205px); max-width: 205px; }
+.editorial-menu-panel { top: 70px; }
+@media(max-width: 1100px) {
+  .editorial-shell .editorial-header { grid-template-columns: 1fr auto; height: auto; }
+  .editorial-header .editorial-logo { grid-column: 1/-1; grid-row: 1; }
+  .editorial-header .editorial-left { grid-column: 1; grid-row: 2; }
+  .editorial-header .editorial-right { grid-column: 2; grid-row: 2; }
+}
+@media(max-width: 760px) {
+  .editorial-shell .editorial-header { display: flex; flex-direction: column; padding: 12px 4%; gap: 12px; }
+  .editorial-header .editorial-left, .editorial-header .editorial-right { width: 100%; justify-content: space-between; }
+  .editorial-header .header-search { flex: 1; width: auto; max-width: none; }
+  .editorial-header .header-theme .home-theme-picker,
+  .editorial-header .header-theme .home-color-slider { width: min(190px,45vw); }
+  .editorial-menu-panel { top: 105px; }
+}
+
+/* keep the outfit section clean without the large heading or text counter */
+.editorial-shell .outfit-generator { padding-top: 30px; }
+/* make the color changes gradual and the slider feel smooth */
+.editorial-shell, .editorial-shell .outfit-generator, .editorial-shell .weather-panel, .editorial-shell .editorial-menu-panel { transition: background-color .4s ease, border-color .4s ease; }
+.editorial-header .header-theme .home-color-slider { background: linear-gradient(to right, #7046d6,#8050d8,#9565e3,#aa7ce8,#c08ae3,#d58bd0,#e38eb4,#e78c9a,#df927f,#ce9870,#b48b68,#98745a,#785a49,#5b463e,#332d2d,#111111,#383838,#666666,#929292,#bdbdbd,#e5e5e5,#a8b3bd,#718ba5,#527ca9,#3464b6,#407fc4,#429dbb,#4db6b5,#61b79d,#78b989,#91b778,#afbb77,#d3bd77,#e2aa76); cursor: pointer; }
+.chat-launch { display: flex; align-items: center; justify-content: center; }
+
+/* keep the menu as an icon and give the color slider more space */
+.editorial-header .editorial-left { gap: 16px; }
+.editorial-header .editorial-menu { flex: 0 0 auto; }
+.editorial-header .header-theme { flex: 1 1 auto; min-width: 0; }
+.editorial-header .header-theme .home-theme-picker,
+.editorial-header .header-theme .home-color-slider { width: 100%; max-width: none; }
+.editorial-header .header-theme .home-theme-picker label { display: none; }
+.editorial-header .header-theme .home-color-slider {
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #d83b43,#e15a4e,#e87b53,#ec9a66,#e5b77e,#d6bd83,#b7b878,#8fb47b,#65a98c,#4ca69d,#4b9fae,#4d8eb8,#557cc1,#646bc2,#755fc0,#7046d6,#895ed4,#a774d4,#c48acb,#ce8caf,#b98686,#a77a6b,#906b58,#785b4b,#604c42,#514743,#66615e,#807e7b,#a5a3a0,#b9b9b9,#8e8e8e,#686868,#454545,#292929,#101010);
+}
+/* both lines of the brand use the same color */
+.editorial-header .editorial-logo,
+.editorial-header .editorial-logo span { color: #171717 !important; }
+html[data-theme=dark] .editorial-header .editorial-logo,
+html[data-theme=dark] .editorial-header .editorial-logo span { color: #f5f5f5 !important; }
+/* animate the background when changing slider colors */
+.editorial-shell, .editorial-shell .app-header, .editorial-shell .outfits-layout,
+.editorial-shell .weather-panel { transition: background-color 450ms ease, border-color 450ms ease; }
+
+/* apply the selected background color to all dashboard pages */
+.editorial-shell { background: color-mix(in srgb, var(--accent-color, #7046d6) 16%, #ffffff); transition: background-color .4s ease, background .4s ease; }
+.editorial-shell .editorial-logo,
+.editorial-shell .editorial-logo span,
+html[data-theme=dark] .editorial-shell .editorial-logo,
+html[data-theme=dark] .editorial-shell .editorial-logo span { color: var(--accent-color, #7046d6) !important; transition: color .4s ease; }
+/* hide the old weather address label without removing the input */
+.editorial-shell .location-form input { min-width: 0; }
+
+/* slide the introduction page upward after Get Started is clicked */
+.start-slide-up { animation: wardrobe-slide-up 650ms cubic-bezier(.22,1,.36,1) both; min-height: 100vh; }
+@keyframes wardrobe-slide-up { from { transform: translateY(100vh); opacity: .9; } to { transform: translateY(0); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .start-slide-up { animation: none; } }
+
+/* Make the desktop header a little taller and the menu icon easier to see */
+@media (min-width: 1101px) {
+  .editorial-shell .editorial-header { min-height: 94px; padding-top: 18px; padding-bottom: 18px; }
+  .editorial-menu-panel { top: 88px; }
+}
+.editorial-header .editorial-menu { font-size: 29px; line-height: 1; padding: 8px 10px; }
+@media (max-width: 1100px) {
+  .editorial-header .editorial-menu { font-size: 27px; }
+}
+
+/*Times New Roman*/
+.editorial-header .editorial-logo { font-family: "Times New Roman", Times, serif !important; }
+
+.clothing-name-editor { display:flex; align-items:center; flex-wrap:wrap; gap:10px; padding:14px; border-radius:12px; background:rgba(255,255,255,.15); margin:12px 0; }
+.clothing-name-editor input { min-width:220px; flex:1; padding:10px 12px; border:1px solid #aaa; border-radius:8px; }
+.clothing-name-editor button { padding:10px 14px; border-radius:8px; cursor:pointer; }
+
+/*centered item name popup after uploading an image*/
+.item-name-overlay { position:fixed; inset:0; z-index:2000; background:rgba(18,15,28,.58); display:flex; align-items:center; justify-content:center; padding:20px; }
+.item-name-dialog { width:min(100%,440px); padding:32px; border-radius:18px; background:#fff; color:#222; box-shadow:0 22px 70px rgba(0,0,0,.25); display:flex; flex-direction:column; gap:16px; }
+.item-name-dialog h2 { font-size:22px; margin:0; font-family:inherit; }
+.item-name-dialog p { margin:0; color:#666; }
+.item-name-dialog input { width:100%; box-sizing:border-box; border:1px solid #aaa; border-radius:8px; padding:13px; font:inherit; color:#222; background:#fff; }
+.item-name-actions { display:flex; justify-content:flex-end; gap:12px; }
+.item-name-actions button { cursor:pointer; padding:11px 17px; border-radius:9px; border:1px solid #bbb; }
+.item-name-actions button:disabled { cursor:not-allowed; opacity:.6; }
+
+/* Place the search icon on the left and display matching closet items */
+.editorial-header .header-search { display:flex; align-items:center; gap:9px; }
+.editorial-header .header-search button { order:0; display:flex; align-items:center; justify-content:center; flex:0 0 22px; padding:0!important; }
+.editorial-header .header-search input { order:1; min-width:0; flex:1; width:100%; }
+.wardrobe-search-results { max-width:1400px; margin:0 auto; min-height:65vh; padding:38px 3.5% 70px; }
+.wardrobe-search-results h1 { font:normal 36px 'Times New Roman',serif; margin:0 0 12px; }
+.wardrobe-search-results > p { margin:0 0 26px; }
