@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { createRoot } from 'react-dom/client'
 import './App.css'
 import { DEFAULT_LOCATION_KEY, readDefaultLocation, searchLocations, getWeather, describeWeather } from './weather'
 import { CgProfile } from 'react-icons/cg'
@@ -592,4 +591,4 @@ function AccountPage({ mode, onComplete, changeMode, onClose }) {
 
 // control the current page and keep track of the logged in user
 function App(){useEffect(()=>{document.documentElement.dataset.theme=localStorage.getItem('wardrobe-theme')||'light'},[]);const [view,setView]=useState(()=>localStorage.getItem('myapp-email')?'app':'landing');const [email,setEmail]=useState(()=>localStorage.getItem('myapp-email')||'');const [slideFromStart,setSlideFromStart]=useState(false);const openIntroduction=()=>{setSlideFromStart(true);setView('login')};const login=e=>{localStorage.setItem('myapp-email',e);setEmail(e);setView('app')};const logout=()=>{localStorage.removeItem('myapp-email');setEmail('');setView('signin')};return view==='landing'?<Landing goLogin={openIntroduction}/>:view==='login'?<div className={slideFromStart?'start-slide-up':''}><Login goHome={()=>{setSlideFromStart(false);setView('landing')}} onLogin={login} goSignup={()=>{setSlideFromStart(false);setView('signup')}} goSignin={()=>{setSlideFromStart(false);setView('signin')}}/></div>:view==='signup'||view==='signin'?<AccountPage key={view} mode={view} onComplete={login} changeMode={setView} onClose={()=>setView('landing')}/>:<Dashboard email={email} logout={logout}/>}
-createRoot(document.getElementById('root')).render(<App />)
+export default App
