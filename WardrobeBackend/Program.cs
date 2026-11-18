@@ -8,6 +8,11 @@ using NSwag.Generation.Processors.Security;
 using System.Text;
 using WardrobeBackend.Controllers;
 using YamlDotNet.Serialization;
+using WardrobeBackend.Config;
+using WardrobeBackend.Services;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Security.Cryptography;
+using Npgsql;
 
 namespace WardrobeBackend
 {
@@ -15,13 +20,17 @@ namespace WardrobeBackend
     {
         public const string Me = @"https://localhost:7163/";
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("Database"));
+            builder.Services.AddScoped<IDbConnectionFactory, RdsIamConnectionFactory>();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+            });
 
             builder.Services.AddSwaggerDocument(document =>
             {
@@ -68,16 +77,18 @@ namespace WardrobeBackend
             app.UseAuthorization();
             app.UseOpenApi();
             
+            using var scope = app.Services.CreateScope();
+            Database.ConnectionFactory = scope.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
+
             app.UseSwaggerUi(settings =>
             {
                 settings.SwaggerRoutes.Add(new SwaggerUiRoute("v1", "/swagger/v1/swagger.json"));
             });
 
             app.UseHttpsRedirection();
-
             app.MapControllers();
 
             app.Run();
         }
-    }
+    } 
 }
