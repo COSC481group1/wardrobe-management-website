@@ -13,6 +13,9 @@ using WardrobeBackend.Services;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 using Npgsql;
+using Amazon.S3;
+using AwsS3.Models;
+using AwsS3.Services;
 
 namespace WardrobeBackend
 {
@@ -26,6 +29,9 @@ namespace WardrobeBackend
 
             builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("Database"));
             builder.Services.AddScoped<IDbConnectionFactory, RdsIamConnectionFactory>();
+            builder.Services.Configure<S3Options>(builder.Configuration.GetSection(S3Options.SectionName));
+            builder.Services.AddAWSService<IAmazonS3>();
+            builder.Services.AddScoped<IStorageService, StorageService>();
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {

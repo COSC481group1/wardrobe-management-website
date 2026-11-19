@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.1.0.2" />
+    <PackageReference Include="AWSSDK.S3" Version="4.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
     <PackageReference Include="AWSSDK.RDS" Version="4.0.105.3" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.20" />
@@ -17,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-  <Content Update="wwwroot\**\*"
-           CopyToPublishDirectory="PreserveNewest" />
+  <Content Update="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
