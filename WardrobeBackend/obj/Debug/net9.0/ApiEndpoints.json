@@ -98,5 +98,47 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "WardrobeBackend.Controllers.WardrobeController",
+    "Method": "AddOutfit",
+    "RelativePath": "Wardrobe/outfit",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "outfitDto",
+        "Type": "OutfitDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "WardrobeBackend.Controllers.WardrobeController",
+    "Method": "GetOutfits",
+    "RelativePath": "Wardrobe/outfits",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "OutfitDto[]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

@@ -6,26 +6,28 @@ namespace WardrobeBackend.Objects;
 
 public class Article
 {
-    public static Article FromDto(ArticleDto dto) => new()
-    {
-        category = dto.Category,
-        name = dto.Name,
-        description = dto.Description,
-        palette = dto.Palette,
-        tags = [.. dto.Tags],
-        articleId = dto.ArticleId,
-        created = dto.ArticleId != 0
-    };
+    public static Article FromDto(ArticleDto dto) => 
+        new()
+        {
+            category = dto.Category,
+            name = dto.Name,
+            description = dto.Description,
+            palette = dto.Palette,
+            tags = [.. dto.Tags],
+            articleId = dto.ArticleId,
+            created = dto.ArticleId != 0
+        };
 
-    public ArticleDto ToDto() => new()
-    {
-        Category = category,
-        Name = name,
-        Description = description,
-        Palette = palette,
-        Tags = tags.ToArray(),
-        ArticleId = articleId
-    };
+    public ArticleDto ToDto() => 
+        new()
+        {
+            Category = category,
+            Name = name,
+            Description = description,
+            Palette = palette,
+            Tags = tags.ToArray(),
+            ArticleId = articleId
+        };
 
     public Category category;
     public int articleId;
