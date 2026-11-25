@@ -1,34 +1,81 @@
+using Amazon.S3;
 using AwsS3.Models;
 using AwsS3.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using WardrobeBackend.Objects;
+using Microsoft.AspNetCore.Authorization;
+using Amazon.Lambda;
+using Microsoft.Extensions.Options;
 
 namespace AutoUpload.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class ClothingImagesController : ControllerBase
 {
-    // 1. Constants and static fields go at the top of the class
     private static readonly HashSet<string> AllowedTypes = new(StringComparer.OrdinalIgnoreCase)
     {
         "image/jpeg", "image/png", "image/webp"
     };
 
+    private static readonly FileExtensionContentTypeProvider ContentTypeProvider = new();
+    private readonly IAWSServices _awsService;
+    private readonly ILogger<ClothingImagesController> _logger;
+    private readonly IAmazonLambda _lambda;
+    private readonly string _originalBucket;
+    private readonly string _processedBucket;
+    private const string OriginalPrefix = "clothing/";
+    private const string ProcessedPrefix = "processed/";
     private const long MaxFileSize = 10 * 1024 * 1024; // 10 MB
 
-    // 2. Injected services
-    private readonly IStorageService _storageService;
-
-    // 3. Constructor
-    public ClothingImagesController(IStorageService storageService)
+    public ClothingImagesController(IAWSServices awsService, ILogger<ClothingImagesController> logger, IAmazonLambda lambda, IOptions<S3Options> s3Options)
     {
-        _storageService = storageService;
+        _awsService = awsService;
+        _logger = logger;
+        _lambda = lambda;
+        _originalBucket = s3Options.Value.BucketName;
+        _processedBucket = s3Options.Value.ProcessedBucketName;
+    }
+    private string CurrentUserEmail =>
+    User.Claims.First(c => c.Type == "Email").Value;
+
+private const int MaxBaseNameLength = 50;
+
+    private static string BuildObjectKey(IFormFile file)
+    {
+        var ext = file.ContentType.ToLowerInvariant() switch
+        {
+            "image/jpeg" => ".jpg",
+            "image/png"  => ".png",
+            "image/webp" => ".webp",
+            _ => throw new InvalidOperationException($"Unsupported content type: {file.ContentType}")
+        };
+
+        var rawName = (file.FileName ?? string.Empty).Replace('\\', '/');
+        var baseName = Path.GetFileNameWithoutExtension(rawName);
+
+        // Keep ASCII letters, digits, '-' and '_' only
+        var safeName = new string(baseName
+            .Where(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_')
+            .ToArray());
+
+        if (safeName.Length > MaxBaseNameLength)
+            safeName = safeName[..MaxBaseNameLength];
+
+        if (safeName.Length == 0)
+            safeName = "image";
+
+        return $"clothing/{safeName}-{Guid.NewGuid():N}{ext}";
     }
 
-    // 4. The upload endpoint
-    [HttpPost(Name = "UploadFile")]
-    public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken ct)
+    [HttpPost(Name = "UploadArticle")]
+    public async Task<IActionResult> UploadFile([FromForm] UploadRequest request, CancellationToken ct)
     {
+        var file = request.File;
+        var articleDto = request.Article;
+
         if (file is null || file.Length == 0)
             return BadRequest("No file provided.");
 
@@ -38,8 +85,7 @@ public class ClothingImagesController : ControllerBase
         if (!AllowedTypes.Contains(file.ContentType))
             return BadRequest("Only JPEG, PNG, or WebP images are allowed.");
 
-        var fileExt = Path.GetExtension(file.FileName);
-        var docName = $"clothing/{Guid.NewGuid()}{fileExt}";
+        var docName = BuildObjectKey(file);
 
         await using var stream = file.OpenReadStream();
 
@@ -50,8 +96,59 @@ public class ClothingImagesController : ControllerBase
             ContentType = file.ContentType
         };
 
-        var result = await _storageService.UploadFileAsync(s3Obj, ct);
+        var result = await _awsService.UploadFileAsync(s3Obj, ct);
+        if (result.StatusCode >= 400)
+            return StatusCode(result.StatusCode, result);
 
-        return StatusCode(result.StatusCode, result);
+        Article newArticle = Article.FromDto(articleDto);
+        await newArticle.SaveFromUploadAsync(CurrentUserEmail, docName, _lambda);
+        return Ok(newArticle);
+    }
+
+    [HttpGet("{documentName}", Name = "GetDocument")]
+    public async Task<IActionResult> GetDocumentFromS3(string documentName, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(documentName))
+            return BadRequest("The 'documentName' parameter is required.");
+
+        var fileName = Path.GetFileName(Uri.UnescapeDataString(documentName));
+
+        if (!ContentTypeProvider.TryGetContentType(fileName, out var contentType))
+            contentType = "application/octet-stream";
+
+        try
+        {
+            // 1. Try the processed version in the processed bucket
+            var processed = await TryDownloadAsync(_processedBucket, ProcessedPrefix + fileName, ct);
+            if (processed is not null)
+                return File(processed, contentType);
+
+            // 2. Fall back to the original upload
+            var original = await TryDownloadAsync(_originalBucket, OriginalPrefix + fileName, ct);
+            if (original is not null)
+                return File(original, contentType);
+
+            return NotFound($"The document '{fileName}' was not found.");
+        }
+        catch (AmazonS3Exception ex)
+        {
+            _logger.LogError(ex, "S3 error fetching {Key}", fileName);
+            return StatusCode((int)ex.StatusCode, ex.Message);
+        }
+    }
+    private async Task<byte[]?> TryDownloadAsync(string bucket, string key, CancellationToken ct)
+    {
+        try
+        {
+            return await _awsService.DownloadFileAsync(bucket, key, ct);
+        }
+        catch (FileNotFoundException)
+        {
+            return null;
+        }
+        catch (AmazonS3Exception ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return null;   // NoSuchKey
+        }
     }
 }

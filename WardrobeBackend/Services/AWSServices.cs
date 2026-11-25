@@ -1,17 +1,19 @@
 using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using AwsS3.Models;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace AwsS3.Services;
 
-public class StorageService : IStorageService
+public class AWSServices : IAWSServices
 {
     private readonly IAmazonS3 _s3;
     private readonly S3Options _options;
-    private readonly ILogger<StorageService> _logger;
+    private readonly ILogger<AWSServices> _logger;
 
-    public StorageService(IAmazonS3 s3, IOptions<S3Options> options, ILogger<StorageService> logger)
+    public AWSServices(IAmazonS3 s3, IOptions<S3Options> options, ILogger<AWSServices> logger)
     {
         _s3 = s3;
         _options = options.Value;
@@ -54,4 +56,33 @@ public class StorageService : IStorageService
 
         return response;
     }
+    
+    public Task<byte[]> DownloadFileAsync(string file, CancellationToken ct = default)
+        => DownloadFileAsync(_options.BucketName, file, ct);
+
+    public async Task<byte[]> DownloadFileAsync(string bucketName, string file, CancellationToken ct = default)
+    {
+        var request = new GetObjectRequest
+        {
+            BucketName = bucketName,
+            Key = file
+        };
+
+        try
+        {
+            using var response = await _s3.GetObjectAsync(request, ct);
+            using var ms = new MemoryStream();
+            await response.ResponseStream.CopyToAsync(ms, ct);
+
+            if (ms.Length == 0)
+                throw new FileNotFoundException($"The document '{file}' is empty.");
+
+            return ms.ToArray();
+        }
+        catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            throw new FileNotFoundException($"The document '{file}' was not found.", ex);
+        }
+    }
 }
+    

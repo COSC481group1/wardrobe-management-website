@@ -8,27 +8,36 @@ namespace WardrobeBackend.Services
 {
     public class RdsIamConnectionFactory : IDbConnectionFactory
     {
-        private readonly DatabaseOptions _options;
+        private readonly NpgsqlDataSource _dataSource;
 
         public RdsIamConnectionFactory(IOptions<DatabaseOptions> options)
         {
-            _options = options.Value;
-        }
+            var o = options.Value;
+            var region = RegionEndpoint.GetBySystemName(o.Region);
 
+            var csb = new NpgsqlConnectionStringBuilder
+            {
+                Host = o.Host,
+                Port = o.Port,
+                Database = o.Database,
+                Username = o.Username,
+                SslMode = SslMode.Require,
+                Timeout = 45,        
+                CommandTimeout = 60,
+                MinPoolSize = 1,     
+                KeepAlive = 30
+            };
+
+            var builder = new NpgsqlDataSourceBuilder(csb.ConnectionString);
+            builder.UsePeriodicPasswordProvider(
+                (_, _) => ValueTask.FromResult(
+                    RDSAuthTokenGenerator.GenerateAuthToken(region, o.Host, o.Port, o.Username)),
+                successRefreshInterval: TimeSpan.FromMinutes(10),   
+                failureRefreshInterval: TimeSpan.FromSeconds(5));
+
+            _dataSource = builder.Build();
+        }
         public async Task<NpgsqlConnection> CreateConnectionAsync()
-        {
-            string authToken = RDSAuthTokenGenerator.GenerateAuthToken(
-                RegionEndpoint.GetBySystemName(_options.Region),
-                _options.Host,
-                _options.Port,
-                _options.Username
-            );
-
-            var connString = $"Host={_options.Host};Port={_options.Port};Database={_options.Database};Username={_options.Username};Password={authToken};SSL Mode=Require;Trust Server Certificate=true";
-
-            var conn = new NpgsqlConnection(connString);
-            await conn.OpenAsync();
-            return conn;
-        }
+            => await _dataSource.OpenConnectionAsync();
     }
 }
