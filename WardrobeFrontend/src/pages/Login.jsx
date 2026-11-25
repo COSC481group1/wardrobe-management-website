@@ -1,3 +1,5 @@
+// VITE WATCH TEST
+
 import { useState } from "react";
 import AuthLayout from "../components/AuthLayout";
 import TextField from "../components/TextField";
@@ -17,6 +19,8 @@ export default function Login({ justRegistered, onLoggedIn, onGoToSignUp, onAbou
   };
 
   const handleSubmit = async (e) => {
+    console.log("LOGIN FORM SUBMITTED");
+
     e.preventDefault();
     setServerError("");
 
@@ -39,7 +43,7 @@ export default function Login({ justRegistered, onLoggedIn, onGoToSignUp, onAbou
 
   return (
     <AuthLayout
-      title="Log in"
+      title="POLLING TEST"
       subtitle="Welcome back to your closet."
       onAboutClick={onAboutClick}
       footer={
@@ -84,8 +88,9 @@ export default function Login({ justRegistered, onLoggedIn, onGoToSignUp, onAbou
         )}
 
         <button type="submit" className="btn-primary" disabled={submitting}>
-          {submitting ? "Logging in…" : "Log in"}
+          TEST LOGIN BUTTON
         </button>
+
       </form>
     </AuthLayout>
   );

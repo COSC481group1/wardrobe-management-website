@@ -1,3 +1,5 @@
+import { getToken } from './api/auth'
+
 // keep the default destination and weather information in browser storage
 export const DEFAULT_LOCATION_KEY = 'wardrobe-default-location'
 const searchCache = new Map()
@@ -72,11 +74,32 @@ export async function getWeather(place) {
   const cached = weatherCache.get(key)
   if (cached && Date.now() - cached.fetchedAt < 600000) return cached
   const url = new URL('https://api.open-meteo.com/v1/forecast')
-  url.search = new URLSearchParams({ latitude: String(place.lat), longitude: String(place.lon), current: 'temperature_2m,apparent_temperature,weather_code,is_day', daily: 'precipitation_probability_max', timezone: 'auto', forecast_days: '1' })
+  url.search = new URLSearchParams({
+  latitude: String(place.lat),
+  longitude: String(place.lon),
+  current: 'temperature_2m,apparent_temperature,weather_code,is_day,wind_speed_10m',
+  wind_speed_unit: 'mph',
+  daily: 'precipitation_probability_max',
+  timezone: 'auto',
+  forecast_days: '1'
+})
   const data = await getJson(url)
   const current = data.current
   if (!current || !Number.isFinite(current.temperature_2m) || !Number.isFinite(current.apparent_temperature) || !Number.isFinite(current.weather_code)) throw new Error('Weather is not available for this location. Please try again.')
-  const result = { temperature: current.temperature_2m, feelsLike: current.apparent_temperature, code: current.weather_code, isDay: current.is_day, rain: data.daily?.precipitation_probability_max?.[0] ?? null, time: current.time, date: data.daily?.time?.[0] || current.time.slice(0,10), fetchedAt: Date.now() }
+  const toFahrenheit = c => (c * 9 / 5) + 32
+
+  const result = {
+    temperature: toFahrenheit(current.temperature_2m),
+    feelsLike: toFahrenheit(current.apparent_temperature),
+    windSpeed: current.wind_speed_10m,
+    code: current.weather_code,
+    isDay: current.is_day,
+    rain: data.daily?.precipitation_probability_max?.[0] ?? null,
+    time: current.time,
+    date: data.daily?.time?.[0] || current.time.slice(0,10),
+    fetchedAt: Date.now()
+  }
+
   weatherCache.set(key, result)
   return result
 }
@@ -90,13 +113,22 @@ export function describeWeather(code) {
   if (code >= 95) return { label: 'Thunderstorms', icon: '⛈' }
   return { label: 'Rain or drizzle', icon: '☂' }
 }
-// give clothing suggestions based on the current weather
-export function weatherAdvice(weather) {
-  const tips = []
-  if (weather.feelsLike < 10) tips.push('Add a warm coat and layers over your suit.')
-  else if (weather.feelsLike >= 25) tips.push('Choose lightweight layers and remove your blazer when needed.')
-  else tips.push('A blazer and trousers are a comfortable starting point; adjust layers to suit you.')
-  if ([71,73,75,77,85,86].includes(weather.code)) tips.push('Add warm, slip-resistant footwear for snow.')
-  else if (weather.rain >= 40 || [51,53,55,56,57,61,63,65,66,67,80,81,82,95,96,99].includes(weather.code)) tips.push('Bring an umbrella and a water-resistant outer layer.')
-  return tips.join(' ')
+
+// send the current weather to the backend
+export async function sendWeather(weather) {
+  const res = await fetch('/Wardrobe/weather', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}`
+    },
+    body: JSON.stringify({
+      temperatureF: weather.temperature,
+      feelsLikeF: weather.feelsLike,
+      windSpeed: weather.windSpeed,
+      code: weather.code,
+      rainChance: weather.rain ?? null
+    })
+  })
+  if (!res.ok) throw new Error(await res.text())
 }

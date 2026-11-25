@@ -93,11 +93,20 @@ export function registerUser({ email, password }) {
 }
 
 export async function loginUser({ email, password }) {
-  const data = await callApi("GET", ENDPOINTS.login, 
-    { query: [ ["username", email], ["password", password ] ]});
+  const data = await callApi("GET", ENDPOINTS.login, {
+    query: [["username", email], ["password", password]],
+  });
+
+  console.log("Login response received:", !!data);
+  console.log("Token returned by backend:", !!data?.token);
+
   if (!data?.token) {
     throw new Error("Login worked but the server sent no token.");
   }
+
   setToken(data.token);
+
+  console.log("Cookie after setToken:", getToken() !== null);
+
   return data;
 }

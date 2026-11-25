@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
-import { DEFAULT_LOCATION_KEY, readDefaultLocation, searchLocations, getWeather, describeWeather } from './weather'
+import { DEFAULT_LOCATION_KEY, readDefaultLocation, searchLocations, getWeather, sendWeather, describeWeather } from './weather'
 import { CgProfile } from 'react-icons/cg'
 import { CiHeart } from 'react-icons/ci'
 import { BsChatText } from 'react-icons/bs'
 import { MdHome, MdOutlineEmail } from 'react-icons/md'
 import { TfiLayoutColumn2 } from 'react-icons/tfi'
 import { BiCloset } from 'react-icons/bi'
+import { loginUser, registerUser } from './api/auth'
 
 // store the available colors for the website theme
 const ACCENT_OPTIONS = [
@@ -367,7 +368,13 @@ function OutfitsPage({ favorites, toggleFavorite, searchTerm = '', submittedStyl
   async function loadWeather(selected) {
     const id = ++request.current
     setPlace(selected); setQuery(selected.label); setMatches([]); setWeather(null); setSuit(null); setError(''); setBusy(true)
-    try { const result = await getWeather(selected); if (id === request.current) setWeather(result) }
+    try {
+    const result = await getWeather(selected)
+    if (id === request.current) {
+      setWeather(result)
+      sendWeather(result)
+      }
+    }
     catch { if (id === request.current) setError('Could not load weather. Check your connection and try again.') }
     finally { if (id === request.current) setBusy(false) }
   }
@@ -442,7 +449,7 @@ function OutfitsPage({ favorites, toggleFavorite, searchTerm = '', submittedStyl
       {error && <p className="location-error" role="alert">{error}</p>}{notice && <p className="location-notice" role="status">{notice}</p>}
       {busy && <p role="status" className="location-hint">Finding your location’s weather…</p>}
       {place && !busy && <div className="active-location">{JSON.stringify(place) !== JSON.stringify(defaultPlace) && <button className="use-default" type="button" onClick={saveDefault}>Save as default</button>}{!weather && <button className="use-default" type="button" onClick={()=>loadWeather(place)}>Retry weather</button>}</div>}
-      {weather && <><h1>{date}</h1><div className="weather-sun" aria-hidden="true">{description.icon}</div><p className="weather-temperature">{Math.round(weather.temperature)}<span>°C</span></p><h2>{description.label}</h2><div className="weather-details"><div><span>Feels like</span><strong>{Math.round(weather.feelsLike)}°C</strong></div><div><span>Rain chance today</span><strong>{weather.rain === null ? 'Unavailable' : weather.rain+'%'}</strong></div></div><p className="weather-updated">Local update: {weather.time.replace('T',' ')}</p></>}
+      {weather && <><h1>{date}</h1><div className="weather-sun" aria-hidden="true">{description.icon}</div><p className="weather-temperature">{Math.round(weather.temperature)}<span>°F</span></p><h2>{description.label}</h2><div className="weather-details"><div><span>Feels like</span><strong>{Math.round(weather.feelsLike)}°F</strong></div><div><span>Rain chance today</span><strong>{weather.rain === null ? 'Unavailable' : weather.rain+'%'}</strong></div></div><p className="weather-updated">Local update: {weather.time.replace('T',' ')}</p></>}
       <p className="weather-sources">Weather: <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a> · Places: <a href="https://photon.komoot.io/" target="_blank" rel="noreferrer">Photon</a> / <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap</a></p>
     </aside>
     <section className="outfit-generator">
@@ -565,11 +572,28 @@ function AccountPage({ mode, onComplete, changeMode, onClose }) {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [error, setError] = useState('')
-  function submit(event) {
-    event.preventDefault()
-    if (signup && password !== confirm) { setError('Passwords do not match.'); return }
+  async function submit(event) {
+     event.preventDefault()
+
+    if (signup && password !== confirm) {
+      setError('Passwords do not match.')
+      return
+    }
+
     setError('')
-    onComplete(email.trim())
+
+    try {
+      if (signup) {
+        await registerUser({ email: email.trim(), password })
+        await loginUser({ email: email.trim(), password })
+      } else {
+        await loginUser({ email: email.trim(), password })
+      }
+
+      onComplete(email.trim())
+    } catch (err) {
+      setError(err.message || 'Authentication failed.')
+    }
   }
   return <main className="account-page">
     <button className="account-close" type="button" aria-label="Close account page and go to main page" onClick={onClose}>×</button>
@@ -582,7 +606,7 @@ function AccountPage({ mode, onComplete, changeMode, onClose }) {
         <div className="account-field"><label htmlFor="account-password">Password</label><div className="password-input"><input id="account-password" type={showPassword ? 'text' : 'password'} autoComplete={signup ? 'new-password' : 'current-password'} minLength={8} required value={password} onChange={e=>{setPassword(e.target.value);setError('')}} aria-describedby={signup ? 'password-hint' : undefined}/><button type="button" aria-controls="account-password" aria-pressed={showPassword} onClick={()=>setShowPassword(!showPassword)}>{showPassword ? 'Hide' : 'Show'}</button></div>{signup && <p id="password-hint" className="password-hint">At least 8 characters</p>}</div>
         {signup && <div className="account-field"><label htmlFor="account-confirm">Confirm password</label><div className="password-input"><input id="account-confirm" type={showConfirm ? 'text' : 'password'} autoComplete="new-password" minLength={8} required value={confirm} onChange={e=>{setConfirm(e.target.value);setError('')}} aria-invalid={!!error} aria-describedby={error ? 'account-error' : undefined}/><button type="button" aria-controls="account-confirm" aria-pressed={showConfirm} onClick={()=>setShowConfirm(!showConfirm)}>{showConfirm ? 'Hide' : 'Show'}</button></div></div>}
         {error && <p id="account-error" className="account-error" role="alert">{error}</p>}
-        <button className="account-submit" type="submit">{signup ? 'Create account' : 'Log in'}</button>
+        <button className="account-submit" type="submit">DEBUG</button>
       </form>
       <p className="account-switch">{signup ? 'Already have an account?' : 'Don’t have an account?'} <button type="button" onClick={()=>changeMode(signup ? 'signin' : 'signup')}>{signup ? 'Log in' : 'Create an account'}</button></p>
     </div></section>
