@@ -1,18 +1,12 @@
-﻿
-using WardrobeBackend.Objects;
+﻿using WardrobeBackend.Objects;
 
 public class ArticleDto
 {
-    public Category Category { get; set; }
-
+    public Category? Category { get; set; }
     public int ArticleId { get; set; }
-
-    public string Name { get; set; }
-
-    public string Description { get; set; }
-
-    public string Palette { get; set; }
-
-    public string[] Tags { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public string? Palette { get; set; }
+    public string[]? Tags { get; set; }
+    public int ImageId { get; set; }
 }
-

@@ -13,6 +13,13 @@ using WardrobeBackend.Services;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 using Npgsql;
+using Amazon.S3;
+using AwsS3.Models;
+using AwsS3.Services;
+using Amazon.Lambda;
+using Amazon.Lambda.Model;
+using Amazon.Extensions.NETCore.Setup; 
+using Amazon;  
 
 namespace WardrobeBackend
 {
@@ -25,8 +32,14 @@ namespace WardrobeBackend
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("Database"));
-            builder.Services.AddScoped<IDbConnectionFactory, RdsIamConnectionFactory>();
+            builder.Services.Configure<S3Options>(builder.Configuration.GetSection(S3Options.SectionName));
 
+            builder.Services.AddAWSService<IAmazonLambda>(new AWSOptions { Region = RegionEndpoint.USEast2 });
+            builder.Services.AddAWSService<IAmazonS3>();
+
+            builder.Services.AddSingleton<IDbConnectionFactory, RdsIamConnectionFactory>();
+            builder.Services.AddScoped<IAWSServices, AWSServices>();
+        
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
@@ -77,8 +90,16 @@ namespace WardrobeBackend
             app.UseAuthorization();
             app.UseOpenApi();
             
-            using var scope = app.Services.CreateScope();
-            Database.ConnectionFactory = scope.ServiceProvider.GetRequiredService<IDbConnectionFactory>();
+            Database.ConnectionFactory = app.Services.GetRequiredService<IDbConnectionFactory>();
+
+            try
+            {
+                await using var warm = await Database.ConnectionFactory.CreateConnectionAsync();
+            }
+            catch (Exception ex)
+            {
+                app.Logger.LogWarning(ex, "DB warm-up failed; first request may be slow");
+}
 
             app.UseSwaggerUi(settings =>
             {

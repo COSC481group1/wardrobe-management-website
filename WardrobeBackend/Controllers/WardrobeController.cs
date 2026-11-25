@@ -20,15 +20,21 @@ public class WardrobeController : ControllerBase
     }
 
     [HttpPost("article")]
-    public void AddArticle(ArticleDto articleDto)
-    {
-        Article newArticle = Article.FromDto(articleDto);
-        newArticle.CreateOrUpdate(CurrentUserEmail);
-    }
+    public void AddArticle(ArticleDto articleDto) =>
+        Article.FromDto(articleDto).CreateOrUpdate(CurrentUserEmail);
+    
+
+    [HttpPost("outfit")]
+    public void AddOutfit(OutfitDto outfitDto) =>
+        Outfit.FromDto(outfitDto).CreateOrUpdate(CurrentUserEmail);
 
     [HttpGet("articles")]
     public ArticleDto[] GetArticels() =>
         [.. new Article().FindAllInPlace(CurrentUserEmail).Select(a => a.ToDto())];
+
+    [HttpGet("outfits")]
+    public OutfitDto[] GetOutfits() =>
+        [.. new Outfit().FindAllInPlace(CurrentUserEmail).Select(a => a.ToDto())];
 
 }
 
