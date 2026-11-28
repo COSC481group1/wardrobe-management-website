@@ -20,6 +20,7 @@ using Amazon.Lambda;
 using Amazon.Lambda.Model;
 using Amazon.Extensions.NETCore.Setup; 
 using Amazon;  
+using WardrobeBackend.Repositories;
 
 namespace WardrobeBackend
 {
@@ -39,6 +40,10 @@ namespace WardrobeBackend
 
             builder.Services.AddSingleton<IDbConnectionFactory, RdsIamConnectionFactory>();
             builder.Services.AddScoped<IAWSServices, AWSServices>();
+            builder.Services.AddScoped<IArticleAnalysisService, ArticleAnalysisService>();
+            builder.Services.AddScoped<IArticleService, ArticleService>();
+            builder.Services.AddScoped<IOutfitRepository, OutfitRepository>();
+            builder.Services.AddScoped<IOutfitService, OutfitService>();
         
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
@@ -80,6 +85,7 @@ namespace WardrobeBackend
                 });
 
             builder.Services.AddSingleton<ITokenProvider, TokenProvider>();
+            builder.Services.AddScoped<RefreshTokenService>();
 
             var app = builder.Build();
 

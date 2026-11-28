@@ -1,6 +1,8 @@
-﻿using Microsoft.IdentityModel.JsonWebTokens;
+﻿
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace WardrobeBackend.Services
@@ -8,6 +10,7 @@ namespace WardrobeBackend.Services
     public interface ITokenProvider
     {
         string CreateToken(string email);
+        string CreateRefreshToken();
     }
 
     public class TokenProvider : ITokenProvider
@@ -24,13 +27,17 @@ namespace WardrobeBackend.Services
             {
                 Subject = new ClaimsIdentity(new List<Claim>
                 {
-                new("Email", email),
+                    new("Email", email),
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(60),
                 Issuer = Program.Me,
                 Audience = Program.Me,
                 SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecureKey)), SecurityAlgorithms.HmacSha256)
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecureKey)),
+                    SecurityAlgorithms.HmacSha256)
             });
+
+        public string CreateRefreshToken() =>
+            Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
     }
 }

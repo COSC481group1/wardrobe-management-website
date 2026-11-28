@@ -1,4 +1,4 @@
-import { getToken } from './api/auth'
+import { callApi } from './api/auth'
 
 // keep the default destination and weather information in browser storage
 export const DEFAULT_LOCATION_KEY = 'wardrobe-default-location'
@@ -116,19 +116,13 @@ export function describeWeather(code) {
 
 // send the current weather to the backend
 export async function sendWeather(weather) {
-  const res = await fetch('/Wardrobe/weather', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${getToken()}`
-    },
-    body: JSON.stringify({
+  return callApi('POST', '/Wardrobe/weather', {
+    body: {
       temperatureF: weather.temperature,
       feelsLikeF: weather.feelsLike,
       windSpeed: weather.windSpeed,
       code: weather.code,
       rainChance: weather.rain ?? null
-    })
+    }
   })
-  if (!res.ok) throw new Error(await res.text())
 }

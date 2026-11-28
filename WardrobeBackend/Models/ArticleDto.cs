@@ -1,9 +1,10 @@
-﻿using WardrobeBackend.Objects;
+﻿using WardrobeBackend.Entities;
 
 public class ArticleDto
 {
     public Category? Category { get; set; }
     public int ArticleId { get; set; }
+    public string? Filename { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
     public string? Palette { get; set; }

@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using WardrobeBackend.Objects;
 using Microsoft.AspNetCore.Authorization;
-using Amazon.Lambda;
 using Microsoft.Extensions.Options;
+using WardrobeBackend.Services;
+using WardrobeBackend.Models;
 
 namespace AutoUpload.Controllers;
 
@@ -23,18 +24,18 @@ public class ClothingImagesController : ControllerBase
     private static readonly FileExtensionContentTypeProvider ContentTypeProvider = new();
     private readonly IAWSServices _awsService;
     private readonly ILogger<ClothingImagesController> _logger;
-    private readonly IAmazonLambda _lambda;
+    private readonly IArticleService _articles;
     private readonly string _originalBucket;
     private readonly string _processedBucket;
     private const string OriginalPrefix = "clothing/";
     private const string ProcessedPrefix = "processed/";
     private const long MaxFileSize = 10 * 1024 * 1024; // 10 MB
 
-    public ClothingImagesController(IAWSServices awsService, ILogger<ClothingImagesController> logger, IAmazonLambda lambda, IOptions<S3Options> s3Options)
+    public ClothingImagesController(IAWSServices awsService, ILogger<ClothingImagesController> logger, IArticleService articles, IOptions<S3Options> s3Options)
     {
         _awsService = awsService;
         _logger = logger;
-        _lambda = lambda;
+        _articles = articles;
         _originalBucket = s3Options.Value.BucketName;
         _processedBucket = s3Options.Value.ProcessedBucketName;
     }
@@ -100,9 +101,10 @@ private const int MaxBaseNameLength = 50;
         if (result.StatusCode >= 400)
             return StatusCode(result.StatusCode, result);
 
-        Article newArticle = Article.FromDto(articleDto);
-        await newArticle.SaveFromUploadAsync(CurrentUserEmail, docName, _lambda);
-        return Ok(newArticle);
+        var saved = await _articles.SaveFromUploadAsync(
+            CurrentUserEmail, docName, articleDto.ToEntity(), ct);
+
+        return Ok(saved.ToDto());
     }
 
     [HttpGet("{documentName}", Name = "GetDocument")]
@@ -118,12 +120,35 @@ private const int MaxBaseNameLength = 50;
 
         try
         {
-            // 1. Try the processed version in the processed bucket
-            var processed = await TryDownloadAsync(_processedBucket, ProcessedPrefix + fileName, ct);
+            _logger.LogInformation(
+                "Looking for processed image in bucket '{Bucket}' at key '{Key}'",
+                _processedBucket,
+                ProcessedPrefix + fileName
+            );
+            var processedFileName = Path.GetFileNameWithoutExtension(fileName) + ".png";
+
+            var processedKey = ProcessedPrefix + processedFileName;
+
+            _logger.LogInformation(
+                "Requesting processed PNG: s3://{Bucket}/{Key}",
+                _processedBucket,
+                processedKey
+            );
+
+            var processed = await TryDownloadAsync(
+                _processedBucket,
+                processedKey,
+                ct
+            );
+
+            _logger.LogInformation(
+                "Processed image lookup result: {Found}",
+                processed is not null
+            );
+
             if (processed is not null)
                 return File(processed, contentType);
 
-            // 2. Fall back to the original upload
             var original = await TryDownloadAsync(_originalBucket, OriginalPrefix + fileName, ct);
             if (original is not null)
                 return File(original, contentType);

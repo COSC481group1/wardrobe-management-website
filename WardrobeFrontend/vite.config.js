@@ -12,7 +12,7 @@ function backendProxy() {
 
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-      if (!req.url?.startsWith('/User') && !req.url?.startsWith('/Wardrobe')) {
+      if (!req.url?.startsWith('/User') && !req.url?.startsWith('/Wardrobe') && !req.url?.startsWith('/ClothingImages')) {
         return next()
       }
         const bodyChunks = []

@@ -1,91 +1,188 @@
-// Talks to the C# backend (WardrobeBackend).
-//
-// API_BASE is empty on purpose: requests go to the same origin the page was
-// loaded from. During `npm run dev` the Vite proxy (see vite.config.js)
-// forwards /User to https://localhost:7163; when the built site is served by
-// the backend itself it is already the same origin. When the backend moves to
-// AWS, serve the site from there too, or set VITE_API_URL to the new address.
-const API_BASE = import.meta.env.VITE_API_URL ?? "";;
 
-// Paths come from the backend controllers -- check {apiurl}/swagger.
+const API_BASE = import.meta.env.VITE_API_URL ?? "";
+
 export const ENDPOINTS = {
   register: "/User/CreateAccount",
   login: "/User/SignIn",
+  refresh: "/User/Refresh",
+  logout: "/User/Logout",
 };
 
-// Per Lucas's plan: login returns a token, the frontend stores it as a
-// cookie, then sends it in the Authorization header on later requests
-// to the user endpoints.
 const TOKEN_COOKIE = "wardrobe_token";
-const ONE_WEEK_SECONDS = 60 * 60 * 24 * 7;
+const REFRESH_COOKIE = "wardrobe_refresh";
 
-export function getToken() {
+const ACCESS_TOKEN_SECONDS = 60 * 60;
+const REFRESH_TOKEN_SECONDS = 60 * 60 * 24 * 30;
+
+function getCookie(name) {
   const match = document.cookie
     .split("; ")
-    .find((row) => row.startsWith(`${TOKEN_COOKIE}=`));
+    .find((row) => row.startsWith(`${name}=`));
+
   return match ? decodeURIComponent(match.split("=")[1]) : null;
 }
 
-function setToken(token) {
+export function getToken() {
+  return getCookie(TOKEN_COOKIE);
+}
+
+function getRefreshToken() {
+  return getCookie(REFRESH_COOKIE);
+}
+
+function setCookie(name, value, maxAge) {
   const secure = window.location.protocol === "https:" ? "; Secure" : "";
-  document.cookie = `${TOKEN_COOKIE}=${encodeURIComponent(token)}; path=/; max-age=${ONE_WEEK_SECONDS}; SameSite=Lax${secure}`;
+
+  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
+}
+
+function setTokens(accessToken, refreshToken) {
+  setCookie(TOKEN_COOKIE, accessToken, ACCESS_TOKEN_SECONDS);
+  setCookie(REFRESH_COOKIE, refreshToken, REFRESH_TOKEN_SECONDS);
 }
 
 export function logout() {
-  document.cookie = `${TOKEN_COOKIE}=; path=/; max-age=0`;
+  const refreshToken = getRefreshToken();
+  const secure = window.location.protocol === "https:" ? "; Secure" : "";
+
+  if (refreshToken) {
+    fetch(`${API_BASE}${ENDPOINTS.logout}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+    }).catch(() => {});
+  }
+
+  document.cookie = `${TOKEN_COOKIE}=; path=/; max-age=0; SameSite=Lax${secure}`;
+  document.cookie = `${REFRESH_COOKIE}=; path=/; max-age=0; SameSite=Lax${secure}`;
 }
 
 export function isLoggedIn() {
-  return Boolean(getToken());
+  return Boolean(getToken() || getRefreshToken());
 }
 
-// Attach this to every request to a user endpoint, e.g.
-//   fetch(`${API_BASE}/User/Something`, { headers: authHeader() })
 export function authHeader() {
   const token = getToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-// One place that makes every backend call. `query` becomes the query string
-// (URLSearchParams encodes special characters in passwords for us); `body`,
-// if given, is sent as JSON. The backend may answer with JSON or plain text,
-// so the reply is read as text first.
-async function callApi(method, path, { query, body } = {}) {
-  const queryString = query ? `?${new URLSearchParams(query)}` : "";
+let refreshPromise = null;
+
+async function refreshAccessToken() {
+  if (refreshPromise) return refreshPromise;
+
+  refreshPromise = (async () => {
+    const refreshToken = getRefreshToken();
+
+    if (!refreshToken) return false;
+
+    try {
+      const response = await fetch(`${API_BASE}${ENDPOINTS.refresh}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken }),
+      });
+
+      if (!response.ok) return false;
+
+      const data = await response.json();
+
+      if (!data?.token || !data?.refreshToken) return false;
+
+      setTokens(data.token, data.refreshToken);
+      return true;
+    } catch {
+      return false;
+    }
+  })();
+
+  try {
+    return await refreshPromise;
+  } finally {
+    refreshPromise = null;
+  }
+}
+
+export async function callApi(method, path, {
+  query,
+  body,
+  retry = true,
+  responseType = 'json'
+} = {}) {
+  const queryString = query
+    ? `?${new URLSearchParams(query)}`
+    : "";
+
+  const url = `${API_BASE}${path}${queryString}`;
 
   let response;
+
   try {
-    response = await fetch(`${API_BASE}${path}${queryString}`, {
+    response = await fetch(url, {
       method,
-      headers: body ? { "Content-Type": "application/json" } : undefined,
+      headers: {
+        ...(body ? { "Content-Type": "application/json" } : {}),
+        ...authHeader(),
+      },
       body: body ? JSON.stringify(body) : undefined,
     });
   } catch {
-    throw new Error("Bad call: " + `${API_BASE}${path}${queryString}`);
+    throw new Error("Bad call: " + url);
+  }
+
+  if (response.status === 401 && getRefreshToken() && retry) {
+    const refreshed = await refreshAccessToken();
+
+    if (refreshed) {
+      return callApi(method, path, { query, body, retry: false });
+    }
+
+    logout();
+    window.location.reload();
+    throw new Error("Your session expired. Please log in again.");
+  }
+
+  let data;
+
+  if (responseType === 'blob' && response.ok) {
+    return await response.blob();
   }
 
   const text = await response.text();
-  let data = text;
+  data = text;
+
   try {
     data = JSON.parse(text);
   } catch {
-    /* plain-text or empty reply -- keep the raw text */
+    // Non-JSON response.
   }
 
   if (!response.ok) {
     const message =
-      typeof data === "string" ? data : data?.message || data?.title || data?.error;
-    if (message) throw new Error(`${API_BASE}${path}${queryString}` + ": Response code did not indicate success: " + message);
+      typeof data === "string"
+        ? data
+        : data?.message || data?.title || data?.error;
+
     if (response.status >= 500) {
-      throw new Error("The server isn't responding. Make sure the backend is running.");
+      throw new Error(
+        "The server isn't responding. Make sure the backend is running."
+      );
     }
+
+    if (message) {
+      throw new Error(`${url}: ${message}`);
+    }
+
     throw new Error("Something went wrong. Please try again.");
   }
-  return data;
-}
 
-// The backend's parameter is called "username"; we send the email there,
-// since the team settled on email + password only.
+  if (responseType === 'blob') {
+    return response.blob();
+  }
+
+  return data;
+  }
+
 export function registerUser({ email, password }) {
   return callApi("POST", ENDPOINTS.register, {
     query: { username: email, password },
@@ -97,16 +194,11 @@ export async function loginUser({ email, password }) {
     query: [["username", email], ["password", password]],
   });
 
-  console.log("Login response received:", !!data);
-  console.log("Token returned by backend:", !!data?.token);
-
-  if (!data?.token) {
-    throw new Error("Login worked but the server sent no token.");
+  if (!data?.token || !data?.refreshToken) {
+    throw new Error("Login failed: missing access or refresh token.");
   }
 
-  setToken(data.token);
-
-  console.log("Cookie after setToken:", getToken() !== null);
+  setTokens(data.token, data.refreshToken);
 
   return data;
 }
